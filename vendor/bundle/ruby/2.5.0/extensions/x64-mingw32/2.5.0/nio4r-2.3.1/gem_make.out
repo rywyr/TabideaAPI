@@ -1,0 +1,14 @@
+current directory: D:/program/ruby/app/mypage/mypage/vendor/bundle/ruby/2.5.0/gems/nio4r-2.3.1/ext/nio4r
+D:/program/ruby/Ruby25-x64/bin/ruby.exe -r ./siteconf20181004-17508-1ccl9m2.rb extconf.rb
+
+current directory: D:/program/ruby/app/mypage/mypage/vendor/bundle/ruby/2.5.0/gems/nio4r-2.3.1/ext/nio4r
+make "DESTDIR=" clean
+make: *** ターゲット 'clean' を make するルールがありません.  中止.
+
+current directory: D:/program/ruby/app/mypage/mypage/vendor/bundle/ruby/2.5.0/gems/nio4r-2.3.1/ext/nio4r
+make "DESTDIR="
+make: 'all' に対して行うべき事はありません.
+
+current directory: D:/program/ruby/app/mypage/mypage/vendor/bundle/ruby/2.5.0/gems/nio4r-2.3.1/ext/nio4r
+make "DESTDIR=" install
+make: 'install' に対して行うべき事はありません.
