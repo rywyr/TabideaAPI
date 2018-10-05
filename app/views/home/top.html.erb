@@ -1,0 +1,30 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>サンプル</title>
+    <link rel="stylesheet" href="../../css/default.css" />
+    <script type="text/javascript">
+        function depart() {
+            var p = myform.place.value;
+            window.alert(p + "から出発します");
+        }
+    </script>
+</head>
+<body>
+    <p>
+    現在登録されている本のタイトルは次のとおりです。
+    </p>
+
+    <p>
+    <% @user.each do |user| %>
+    [タイトル] <%= user.name %>, [発売日] <%= user.email %><br />
+    <% end %>
+    </p>
+    <h1>出発地のご案内</h1>
+    <h1>Home#top</h1>
+    <p>Find me in app/views/home/top.html.erb</p>
+    <form name="myform" action="Sample1.html">
+        <input type="text" name="place" />
+        <input type="button" value="表示" onclick="depart()" />
+    </form>
+    
+</body>
