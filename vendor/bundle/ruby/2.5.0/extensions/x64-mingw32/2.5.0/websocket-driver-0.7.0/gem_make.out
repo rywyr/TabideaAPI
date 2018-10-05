@@ -1,0 +1,16 @@
+current directory: D:/program/ruby/app/mypage/mypage/vendor/bundle/ruby/2.5.0/gems/websocket-driver-0.7.0/ext/websocket-driver
+D:/program/ruby/Ruby25-x64/bin/ruby.exe -r ./siteconf20181004-17508-chbgfp.rb extconf.rb
+creating Makefile
+
+current directory: D:/program/ruby/app/mypage/mypage/vendor/bundle/ruby/2.5.0/gems/websocket-driver-0.7.0/ext/websocket-driver
+make "DESTDIR=" clean
+
+current directory: D:/program/ruby/app/mypage/mypage/vendor/bundle/ruby/2.5.0/gems/websocket-driver-0.7.0/ext/websocket-driver
+make "DESTDIR="
+generating websocket_mask-x64-mingw32.def
+compiling websocket_mask.c
+linking shared-object websocket_mask.so
+
+current directory: D:/program/ruby/app/mypage/mypage/vendor/bundle/ruby/2.5.0/gems/websocket-driver-0.7.0/ext/websocket-driver
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 websocket_mask.so ./.gem.20181004-17508-1m2qpk3
