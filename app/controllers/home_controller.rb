@@ -19,17 +19,20 @@ class HomeController < ApplicationController
   end
 
   def create
-    skip_before_filter :verify_authenticity_token
-    if (params.kind_of?(Hash)) then
       name = params[:user][:name]
       email = params[:user][:email]
       User.create(name: name,email: email)
-    else
-      para = JSON.parse(params)
-      name = para[:user][:name]
-      email = para[:user][:email]
-      User.create(name: name,email: email)
+    #else
+      #para = JSON.parse(params)
+      #name = para[:user][:name]
+      #email = para[:user][:email]
+      #User.create(name: name,email: email)
       #curl http://localhost:3000/home/create -X POST -H "Content-Type: application/json" -d "{"user":{"name": "ainz","email": "abs@mail"}}"
-    end
   end
+
+  def show
+    @id = params[:id]
+    @user = User.find(params[:id])
+  end
+
 end
