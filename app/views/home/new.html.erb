@@ -1,0 +1,20 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>サンプル</title>
+    <link rel="stylesheet" href="../../css/default.css" />
+    <script type="text/javascript">
+        function depart() {
+            var p = myform.place.value;
+        }
+    </script>
+</head>
+<body>
+        test
+    <h1>データベース入力フォーム    </h1>
+    <%= form_for @user,:url => {:action => :create}  do |f| %>
+        名前：<%= f.text_field :name %>
+        メールアドレス：<%= f.text_field :email %>
+        <%= f.submit %>
+    <% end %>
+    
+</body>

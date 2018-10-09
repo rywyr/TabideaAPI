@@ -14,7 +14,13 @@ class HomeController < ApplicationController
     render:json => personal
   end
 
-  def edit
-      @user = User.find_by(name: params[:peter])
+  def new
+      @user = User.new 
+  end
+
+  def create
+    name = params[:user][:name]
+    email = params[:user][:email]
+    User.create(name: name,email: email)
   end
 end
