@@ -1,4 +1,7 @@
 class HomeController < ApplicationController
+
+  require 'net/http'
+
   def top #topにおける裏の処理を担当（モデルに対する処理の命令）
     @user = User.all
   end
@@ -34,6 +37,13 @@ class HomeController < ApplicationController
     @id = params[:id]
     @user = User.find(params[:id])
     render:json => @user
+  end
+
+  def jcre
+    uri = URI.parse('http://localhost:3000/home/index')
+    json = Net::HTTP.get(uri)
+    result = JSON.parse(json)
+    p result
   end
 
 end
