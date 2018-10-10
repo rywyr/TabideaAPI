@@ -42,12 +42,16 @@ class HomeController < ApplicationController
 
   def jcre
     @json_request = JSON.parse(request.body.read)
-    name = @json_request["user"]["name"]
-    email = @json_request["user"]["email"]
+    name = @json_request["_json"]["user"]["name"]
+    email = @json_request["_json"]["user"]["email"]
     User.create(name: name,email: email)
+    #curl https://quiet-sands-57575.herokuapp.com/home/jcre -X POST -H "Content-Type: application/json" -d "{\"user\":{\"name\": \"ichikawa\",\"email\": \"sdfsdf@mail\"}}"
   end
 
-  def delete
+  def destroy
+    @name = params[:name]
+    User.find_by(name:params[:name]).destroy
+    #curl -X DELETE http://localhost:3000/home/destroy/imamura
   end
 
 end
