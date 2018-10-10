@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
 
-  require 'net/http'
+  skip_before_action :verify_authenticity_token
+
 
   def top #topにおける裏の処理を担当（モデルに対する処理の命令）
     @user = User.all
@@ -40,10 +41,13 @@ class HomeController < ApplicationController
   end
 
   def jcre
-    uri = URI.parse('http://localhost:3000/home/index')
-    json = Net::HTTP.get(uri)
-    result = JSON.parse(json)
-    p result
+    @json_request = JSON.parse(request.body.read)
+    name = @json_request["user"]["name"]
+    email = @json_request["user"]["email"]
+    User.create(name: name,email: email)
+  end
+
+  def delete
   end
 
 end
