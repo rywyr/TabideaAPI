@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  get 'mmocontroller/top'
+  get 'mmocontroller/index'
+  get 'mmocontroller/new'
+  post 'mmocontroller/create'
+  get 'mmocontroller/show'
+  get 'mmocontroller/show/:id'=>'mmocontroller#show'
+  post 'mmocontroller/jcre'
+  delete 'mmocontroller/destroy/:id'=>'mmocontroller#destroy'
+  post 'mmocontroller/edit'
   get 'home/top'
   get 'home/index'
   post 'home/edit'

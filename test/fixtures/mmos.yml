@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  text: MyString
+  xposition: 1
+  yposition: 1
+  parent: 1
+  event: one
+
+two:
+  text: MyString
+  xposition: 1
+  yposition: 1
+  parent: 1
+  event: two
