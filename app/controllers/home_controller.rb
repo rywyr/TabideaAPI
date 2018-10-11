@@ -1,6 +1,15 @@
 class HomeController < ApplicationController
 
   skip_before_action :verify_authenticity_token
+  #top:全データの一覧を表示（デバッグ用）
+  #index:全データをjsonで返す
+  #new:コントローラー内で用いる変数を定義
+  #create:フォームからユーザーを追加（デバッグ用）
+  #show:該当するidのデータをjsonで返す
+  #jcre:受けとったjsonからデータを追加
+  #destroy:該当する名前のデータを削除
+  #update:アップデート
+  #edit:受け取ったjsonからデータを編集して、アップデート
 
 
   def top #topにおける裏の処理を担当（モデルに対する処理の命令）
@@ -54,8 +63,12 @@ class HomeController < ApplicationController
     #curl -X DELETE http://localhost:3000/home/destroy/imamura
   end
 
-  def update
-      
+  def edit
+      @json_request = JSON.parse(request.body.read)#ハッシュ
+      id = @json_request["id"]
+      @user = User.find(id); #レコード自体が入っている(データベースのデータ)
+      @user.update_attributes(name: @json_request["name"],email: @json_request["email"])
+      #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"
   end
 
 end

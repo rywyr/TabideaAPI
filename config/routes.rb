@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get 'home/top'
   get 'home/index'
-  get 'home/update'
+  post 'home/edit'
   post 'home/create'
   post 'home/jcre'
   delete 'home/destroy/:name' =>'home#destroy'
