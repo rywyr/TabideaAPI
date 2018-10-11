@@ -32,6 +32,7 @@ class HomeController < ApplicationController
 		  "eventList":eve_array
 	}
     render:json => personal
+  #curl http://localhost:3000/home/index/2 -X POST -H "Content-Type: application/json"
   end
 
   def new
