@@ -54,4 +54,8 @@ class HomeController < ApplicationController
     #curl -X DELETE http://localhost:3000/home/destroy/imamura
   end
 
+  def update
+      
+  end
+
 end
