@@ -42,8 +42,8 @@ class HomeController < ApplicationController
 
   def jcre
     @json_request = JSON.parse(request.body.read)
-    name = @json_request["user"]["name"]
-    email = @json_request["user"]["email"]
+    name = @json_request["name"]
+    email = @json_request["email"]
     User.create(name: name,email: email)
     #curl https://quiet-sands-57575.herokuapp.com/home/jcre -X POST -H "Content-Type: application/json" -d "{\"user\":{\"name\": \"ichikawa\",\"email\": \"sdfsdf@mail\"}}"
   end
