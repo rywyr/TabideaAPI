@@ -17,8 +17,8 @@ User.create(name: 'Patola', email: array[1])
 User.create(name: 'Potter', email: array[2])
 
 
-Userevent.create(userid:1,eventid:1)
-Userevent.create(userid:2,eventid:3)
+Userevent.create(user_id:1,event_id:1)
+Userevent.create(user_id:2,event_id:3)
 
 Event.create(eventname:"福岡",explain:"おいしい")
 Event.create(eventname:"佐賀",explain:"鏡山")

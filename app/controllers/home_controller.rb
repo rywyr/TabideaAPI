@@ -14,16 +14,23 @@ class HomeController < ApplicationController
 
   def top #topにおける裏の処理を担当（モデルに対する処理の命令）
     @user = User.all
+    @event = Event.all
+    @userevent = Userevent.all
   end
 
   def index
     us = User.all
-    personal =Array.new
-    num =0
-    us.each do |user|
-      personal[num] ={'name' => user.name, 'email' => user.email}
-      num = num+1
-    end
+    personal = {
+		  "id": 1,
+		  "name": "izawa",
+		  "eventList":[
+			{
+				 "id":1,
+				 "title":"ゼミ旅行",
+				 "member":[1,2,3],	 
+			}
+		 ]
+	}
     render:json => personal
   end
 

@@ -10,18 +10,37 @@
     </script>
 </head>
 <body>
-    <p>
-    現在登録されている本のタイトルは次のとおりです。
-    </p>
-
+    <h1>データベースからデータの一覧を取り出すデバッグ用ページ</h1>
+    <h2>ユーザーデータベースのデータ一覧</h2>
     <p>
     <% @user.each do |user| %>
     [id] <%= user.id %>, [名前] <%= user.name %>, [イーメール] <%= user.email %><br />
     <% end %>
     </p>
-    <h1>出発地のご案内</h1>
-    <h1>Home#top</h1>
-    <p>Find me in app/views/home/top.html.erb</p>
+    
+    <h2>イベントデータベースのデータの一覧</h2>
+    <p>
+    <% @event.each do |event| %>
+    [id] <%= event.id %>, [行先] <%= event.eventname %>, [説明] <%= event.explain %><br />
+    <% end %>
+    </p>
+
+    <h2>中間テーブルのデータ一覧</h2>
+    <p>
+    <% @userevent.each do |usev| %>
+    [id] <%= usev.id %>, [行先] <%= usev.user_id %>, [説明] <%= usev.event_id %><br />
+    <% end %>
+    </p>
+
+    <h2>ユーザーデータベースとイベントデータベースの関連付け</h2>
+    <p>
+    <% @user.each do |user| %>
+        <% user.userevent.each do |ue| %>
+            [名前] <%= user.name %>, [行先] <%= ue.event.eventname %><br />
+        <% end %>
+    <% end %>
+    </p>
+
     <form name="myform" action="Sample1.html">
         <input type="text" name="place" />
         <input type="button" value="表示" onclick="depart()" />
