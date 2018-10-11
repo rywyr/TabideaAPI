@@ -12,14 +12,14 @@ while num <10 do
     array[num] = "aaaa@bbbb"+num.to_s
     num = num + 1
 end 
-User.create(name: 'Peter', email: array[0])
-User.create(name: 'Patola', email: array[1])
-User.create(name: 'Potter', email: array[2])
+#User.create(name: 'Peter', email: array[0])
+#User.create(name: 'Patola', email: array[1])
+#User.create(name: 'Potter', email: array[2])
 
 
-Userevent.create(user_id:27,event_id:1)
-Userevent.create(user_id:28,event_id:3)
+Userevent.create(user_id:1,event_id:1)
+Userevent.create(user_id:2,event_id:3)
 
-Event.create(eventname:"福岡",explain:"おいしい")
-Event.create(eventname:"佐賀",explain:"鏡山")
-Event.create(eventname:"長崎",explain:"異国")
+#Event.create(eventname:"福岡",explain:"おいしい")
+#Event.create(eventname:"佐賀",explain:"鏡山")
+#Event.create(eventname:"長崎",explain:"異国")
