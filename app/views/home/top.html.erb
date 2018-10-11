@@ -14,7 +14,7 @@
     <h2>ユーザーデータベースのデータ一覧</h2>
     <p>
     <% @user.each do |user| %>
-    [id] <%= user.id %>, [名前] <%= user.name %>, [イーメール] <%= user.email %><br />
+    [id] <%= user.id %>, [名前] <%= user.name %>, [イーメール] <%= user.email %>, [UUID] <%= user.uuid %><br />
     <% end %>
     </p>
     

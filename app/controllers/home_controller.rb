@@ -18,18 +18,18 @@ class HomeController < ApplicationController
     @userevent = Userevent.all
   end
 
-  def index
-    us = User.all
+  def index #ユーザーの情報を返す
+    @user = User.find(params[:uuid])
+    eve_array = Array.new
+    num = 0
+    @user.userevent.each do |ue| 
+      eve_array[num] = {"id":ue.event.id,"title":ue.event.eventname,"member":[1,2,3]}
+       num= num + 1
+    end
     personal = {
-		  "id": 1,
-		  "name": "izawa",
-		  "eventList":[
-			{
-				 "id":1,
-				 "title":"ゼミ旅行",
-				 "member":[1,2,3],	 
-			}
-		 ]
+		  "id": @user.id,
+		  "name": @user.name,
+		  "eventList":eve_array
 	}
     render:json => personal
   end
@@ -74,7 +74,7 @@ class HomeController < ApplicationController
       @json_request = JSON.parse(request.body.read)#ハッシュ
       id = @json_request["id"]
       @user = User.find(id); #レコード自体が入っている(データベースのデータ)
-      @user.update_attributes(name: @json_request["name"],email: @json_request["email"])
+      @user.update_attributes(name: @json_request["name"],email: @json_request["email"],uuid: @json_request["uuid"])
       #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"
   end
 
