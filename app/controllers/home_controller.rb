@@ -71,4 +71,10 @@ class HomeController < ApplicationController
       #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"
   end
 
+
+
+
+
+  
+
 end
