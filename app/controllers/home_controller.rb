@@ -14,17 +14,25 @@ class HomeController < ApplicationController
 
   def top #topにおける裏の処理を担当（モデルに対する処理の命令）
     @user = User.all
+    @event = Event.all
+    @userevent = Userevent.all
   end
 
-  def index
-    us = User.all
-    personal =Array.new
-    num =0
-    us.each do |user|
-      personal[num] ={'name' => user.name, 'email' => user.email}
-      num = num+1
+  def index #ユーザーの情報を返す
+    @user = User.find(params[:uuid])
+    eve_array = Array.new
+    num = 0
+    @user.userevent.each do |ue| 
+      eve_array[num] = {"id":ue.event.id,"title":ue.event.eventname,"member":[1,2,3]}
+       num= num + 1
     end
+    personal = {
+		  "id": @user.id,
+		  "name": @user.name,
+		  "eventList":eve_array
+	}
     render:json => personal
+  #curl http://localhost:3000/home/index/2 -X POST -H "Content-Type: application/json"
   end
 
   def new
@@ -67,8 +75,14 @@ class HomeController < ApplicationController
       @json_request = JSON.parse(request.body.read)#ハッシュ
       id = @json_request["id"]
       @user = User.find(id); #レコード自体が入っている(データベースのデータ)
-      @user.update_attributes(name: @json_request["name"],email: @json_request["email"])
+      @user.update_attributes(name: @json_request["name"],email: @json_request["email"],uuid: @json_request["uuid"])
       #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"
   end
+
+
+
+
+
+  
 
 end
