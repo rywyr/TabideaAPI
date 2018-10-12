@@ -28,7 +28,7 @@
     <h2>中間テーブルのデータ一覧</h2>
     <p>
     <% @userevent.each do |usev| %>
-    [id] <%= usev.id %>, [行先] <%= usev.user_id %>, [説明] <%= usev.event_id %><br />
+    [id] <%= usev.id %>, [ユーザー] <%= usev.user_id %>, [イヴェント] <%= usev.event_id %><br />
     <% end %>
     </p>
 

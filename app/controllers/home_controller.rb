@@ -22,18 +22,34 @@ class HomeController < ApplicationController
   def index #UUIDを受け取ってユーザーの情報を返す
     @user = User.find_by(uuid:params[:uuid])
     eve_array = Array.new
-    mmo_array = Array.new
-    mem_array = Array.new
     num = 0
 
     @user.userevent.each do |ue|
+      mmo_array = Array.new
+      mem_array = Array.new
       eventid = ue.event.id
-      Mmo.all.each do |mmoeve|
-        if(Mmo.find_by(event_id:eventid))
-          mmo_array[num] = {"viewIndex":mmoeve.viewIndex,"text":mmoeve.text,"positionX":mmoeve.xposition,"positionY":mmoeve.yposition}
+      
+      #MMO配列の作成
+      j = 0
+      Mmo.all.each do |mmoeve| #個々の処理もうちょっと何とかできるはず
+        if(mmoeve.event_id == eventid)
+          mmo_array[j] = {"viewIndex":mmoeve.viewIndex,"text":mmoeve.text,"positionX":mmoeve.xposition,"positionY":mmoeve.yposition}
+          j = j + 1
         end
       end
-      eve_array[num] = {"id":eventid,"title":ue.event.eventname,"member":[1,2,3],"mmo":mmo_array}
+      
+      #メンバー配列の作成
+      j = 0
+      Userevent.all.each do |eu|
+        if(eu.event_id == eventid)
+          mem_array[j] =eu.user_id
+          j = j + 1 
+        end
+      end
+
+
+      #イベント配列の作成
+      eve_array[num] = {"id":eventid,"title":ue.event.eventname,"member":mem_array,"mmo":mmo_array}
       num= num + 1
     end
 
