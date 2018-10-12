@@ -26,6 +26,9 @@ class EventController < ApplicationController
             eventlist[num] = {"id":ev.id,"title":ev.eventname,"explain":ev.explain}
             num = num + 1
         end
-    render:json => eventlist
+        render:json => eventlist
+    end
+
+    def join
     end
 end

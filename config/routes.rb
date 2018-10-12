@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get 'home/index/:uuid' => 'home#index'
   post 'home/edit'
   post 'home/create'
-  post 'home/jcre'
+  post 'home/usercreate'
   delete 'home/destroy/:name' =>'home#destroy'
   get 'home/destroy'
   get 'home/new'
