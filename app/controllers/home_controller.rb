@@ -16,52 +16,62 @@ class HomeController < ApplicationController
     @user = User.all
     @event = Event.all
     @userevent = Userevent.all
+    @mmo = Mmo.all
   end
 
-  def index #ユーザーの情報を返す
+  def index #UUIDを受け取ってユーザーの情報を返す
     @user = User.find_by(uuid:params[:uuid])
     eve_array = Array.new
+    mmo_array = Array.new
+    mem_array = Array.new
     num = 0
-    @user.userevent.each do |ue| 
-      eve_array[num] = {"id":ue.event.id,"title":ue.event.eventname,"member":[1,2,3]}
-       num= num + 1
+
+    @user.userevent.each do |ue|
+      eventid = ue.event.id
+      Mmo.all.each do |mmoeve|
+        if(Mmo.find_by(event_id:eventid))
+          mmo_array[num] = {"viewIndex":mmoeve.viewIndex,"text":mmoeve.text,"positionX":mmoeve.xposition,"positionY":mmoeve.yposition}
+        end
+      end
+      eve_array[num] = {"id":eventid,"title":ue.event.eventname,"member":[1,2,3],"mmo":mmo_array}
+      num= num + 1
     end
-    personal = {
+
+    user = {
 		  "id": @user.id,
 		  "name": @user.name,
-		  "eventList":eve_array
+      "eventList":eve_array #memberをjsaonに追加
+      #MMOリストを返せるようにしてみる
 	}
-    render:json => personal
+    render:json => user
   #curl http://localhost:3000/home/index/2 -X POST -H "Content-Type: application/json"
   #curl http://quiet-sands-57575.herokuapp.com/home/index/2 -X POST -H "Content-Type: application/json"
 end
 
-  def new
-      @user = User.new 
+  def new #いらん
+    @user = User.new
+    @event = Event.new
   end
 
-  def create
+  def create #いらん
       name = params[:user][:name]
       email = params[:user][:email]
-      User.create(name: name,email: email)
-    #else
-      #para = JSON.parse(params)
-      #name = para[:user][:name]
-      #email = para[:user][:email]
-      #User.create(name: name,email: email)
+      uuid = params[:user][:uuid]
+      User.create(name: name,email: email,uuid: uuid)
       #curl http://localhost:3000/home/create -X POST -H "Content-Type: application/json" -d "{"user":{"name": "ainz","email": "abs@mail"}}"
   end
 
-  def show
+  def show　#いらない？
     @id = params[:id]
     @user = User.find(params[:id])
     render:json => @user
   end
 
-  def jcre
+  def jcre　#一番最初のユーザー作成
     @json_request = JSON.parse(request.body.read)
     name = @json_request["name"]
     email = @json_request["email"]
+    uuid = @json_request["uuid"]
     User.create(name: name,email: email)
     #curl https://quiet-sands-57575.herokuapp.com/home/jcre -X POST -H "Content-Type: application/json" -d "{\"user\":{\"name\": \"ichikawa\",\"email\": \"sdfsdf@mail\"}}"
   end

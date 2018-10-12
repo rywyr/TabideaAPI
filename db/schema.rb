@@ -10,16 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_12_012448) do
+ActiveRecord::Schema.define(version: 2018_10_11_125703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "events", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "eventname"
     t.string "explain"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "mmos", force: :cascade do |t|
@@ -28,9 +28,9 @@ ActiveRecord::Schema.define(version: 2018_10_12_012448) do
     t.integer "yposition", null: false
     t.integer "parent"
     t.bigint "event_id"
+    t.integer "viewIndex"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "viewIndex"
     t.index ["event_id"], name: "index_mmos_on_event_id"
   end
 

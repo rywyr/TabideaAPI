@@ -6,6 +6,7 @@ class CreateMmos < ActiveRecord::Migration[5.2]
       t.integer :yposition, null: false
       t.integer :parent
       t.references :event, foreign_key: true
+      t.integer :viewIndex
 
       t.timestamps
     end

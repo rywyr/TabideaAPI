@@ -9,11 +9,19 @@
     </script>
 </head>
 <body>
-        test
-    <h1>データベース入力フォーム    </h1>
+    <h1>データベースデータ挿入フォームデバッガ―</h1>
+
+    <h2>挿入フォーム</h2>
     <%= form_for @user,:url => {:action => :create}  do |f| %>
         名前：<%= f.text_field :name %>
         メールアドレス：<%= f.text_field :email %>
+        UUID：<%= f.text_field :uuid%>
+        <%= f.submit %>
+    <% end %>
+
+    <%= form_for @event,:url => {:action => :create}  do |f| %>
+        イベントネーム：<%= f.text_field :eventname %>
+        イベントの説明：<%= f.text_field :explain %>
         <%= f.submit %>
     <% end %>
     

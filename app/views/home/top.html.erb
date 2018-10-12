@@ -44,9 +44,7 @@
     <h2>マインドマップオブジェクトの関連付け</h2>
     <p>
     <% @mmo.each do |mmo| %>
-        <% mmo.each do |ue| %>
-          [id]<%= mmo.id %>,  [text] <%= mmo.text %>, [xposition] <%= mmo.xposition %>, [yposition] <%= mmo.yposition %>,  [parent] <%= mmo.parent %>,[event_id]<%= mmo.event_id %><br />
-        <% end %>
+        [id]<%= mmo.id %>,  [text] <%= mmo.text %>, [xposition] <%= mmo.xposition %>, [yposition] <%= mmo.yposition %>,  [parent] <%= mmo.parent %>,[event_id]<%= mmo.event_id %><br />
     <% end %>
     </p>
 
