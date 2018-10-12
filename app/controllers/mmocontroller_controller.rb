@@ -19,7 +19,7 @@ class MmocontrollerController < ApplicationController
     mmolist = Array.new
     num = 0
     @mmo.each do |mmo|
-      mmolist[num] = {'text'=>mmo.text,'xposition'=>mmo.xposition,'yposition'=>mmo.yposition,'parent'=>mmo.parent,'event_id' => mmo.event_id,'viewIndex' => mmo.viewIndex}
+      mmolist[num] = {'id' => mmo.id,'text'=>mmo.text,'xposition'=>mmo.xposition,'yposition'=>mmo.yposition,'parent'=>mmo.parent,'event_id' => mmo.event_id,'viewIndex' => mmo.viewIndex}
       num = num + 1
     end
     render:json => mmolist
@@ -78,12 +78,18 @@ class MmocontrollerController < ApplicationController
     @json_request = JSON.parse(request.body.read)#ハッシュ
       @id = @json_request["id"]
       @mmo = Mmo.find(@id); #レコード自体が入っている(データベースのデータ)
-      @user.update_attributes(text: @json_request["text"],xposition: @json_request["xposition"],yposition: @json_request["yposition"],parent: @json_request["parent"],event_id: @json_request["event_id"])
+      @mmo.update_attributes(
+        viewIndex: @json_request["viewIndex"],
+        text: @json_request["text"],
+        xposition: @json_request["xposition"],
+        yposition: @json_request["yposition"],
+        parent: @json_request["parent"],
+        event_id: @json_request["event_id"])
   end
 
   private
   
     def mmo_params
-      params.require(:mmo).permit(:event_id, :text, :xposition, :yposition, :parent, :viewIndex)
+      params.require(:mmo).permit(:id,:event_id, :text, :xposition, :yposition, :parent, :viewIndex)
     end
 end
