@@ -19,7 +19,7 @@ class HomeController < ApplicationController
   end
 
   def index #ユーザーの情報を返す
-    @user = User.find(params[:uuid])
+    @user = User.find_by(uuid:params[:uuid])
     eve_array = Array.new
     num = 0
     @user.userevent.each do |ue| 
@@ -33,7 +33,8 @@ class HomeController < ApplicationController
 	}
     render:json => personal
   #curl http://localhost:3000/home/index/2 -X POST -H "Content-Type: application/json"
-  end
+  #curl http://quiet-sands-57575.herokuapp.com/home/index/2 -X POST -H "Content-Type: application/json"
+end
 
   def new
       @user = User.new 
@@ -77,12 +78,7 @@ class HomeController < ApplicationController
       @user = User.find(id); #レコード自体が入っている(データベースのデータ)
       @user.update_attributes(name: @json_request["name"],email: @json_request["email"],uuid: @json_request["uuid"])
       #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"
+      #curl httphttps://quiet-sands-57575.herokuapp.com/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"izawa\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\",\"uuid\":\"izawan\"}"
   end
-
-
-
-
-
-  
 
 end
