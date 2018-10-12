@@ -5,7 +5,8 @@ class EventController < ApplicationController
         @json_request = JSON.parse(request.body.read)
         @user = User.find(params[:id])
         eventname = @json_request["title"]
-        @user.event.create(eventname: eventname)
+        explain = @json_request["explain"]
+        @user.event.create(eventname: eventname,explain: explain)
 
         #イベント作成後、ユーザーが所属するイベントリストの送信
         eve_array = Array.new
