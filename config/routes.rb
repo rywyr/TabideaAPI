@@ -8,8 +8,11 @@ Rails.application.routes.draw do
   post 'mmocontroller/jcre'
   delete 'mmocontroller/destroy/:id'=>'mmocontroller#destroy'
   post 'mmocontroller/edit'
+
   post 'event/create/:id' => 'event#create'
   get 'event/index'
+  get 'event/join/:user_id/:event_id' =>'home#top'
+
   get 'home/top'
   get 'home/index'
   get 'home/index/:uuid' => 'home#index'
@@ -21,5 +24,6 @@ Rails.application.routes.draw do
   get 'home/new'
   get 'home/show'
   get 'home/show/:id' => 'home#show'
+
   root 'application#hello'
 end

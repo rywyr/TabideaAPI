@@ -86,10 +86,10 @@ class HomeController < ApplicationController
     #json形式でデータが送られrてくることを想定
     #なぜかメソッドが実行されていないようなのでここは一時保留
     @json_request = JSON.parse(request.body.read)
-    @name = @json_request["name"]
+    name = @json_request["name"]
     email = @json_request["email"]
     uuid = @json_request["uuid"]
-    User.create(name: "おかしい",email: "おかしい",uuid: "うんこ")
+    User.create(name: name,email: email,uuid: uuid)
     #curl https://quiet-sands-57575.herokuapp.com/home/jcre -X POST -H "Content-Type: application/json" -d "{\"user\":{\"name\": \"ichikawa\",\"email\": \"sdfsdf@mail\"}}"
   end
 
