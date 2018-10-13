@@ -47,7 +47,6 @@ class HomeController < ApplicationController
         end
       end
 
-
       #イベント配列の作成
       eve_array[num] = {"id":eventid,"title":ue.event.eventname,"member":mem_array,"mmo":mmo_array}
       num= num + 1
@@ -58,11 +57,11 @@ class HomeController < ApplicationController
 		  "name": @user.name,
       "eventList":eve_array #memberをjsaonに追加
       #MMOリストを返せるようにしてみる
-	}
+	  }
     render:json => user
-  #curl http://localhost:3000/home/index/2 -X POST -H "Content-Type: application/json"
-  #curl http://quiet-sands-57575.herokuapp.com/home/index/2 -X POST -H "Content-Type: application/json"
-end
+    #curl http://localhost:3000/home/index/2 -X POST -H "Content-Type: application/json"
+    #curl http://quiet-sands-57575.herokuapp.com/home/index/2 -X POST -H "Content-Type: application/json"
+  end
 
   def new #いらん
     @user = User.new
@@ -83,7 +82,9 @@ end
     render:json => @user
   end
 
-  def jcre　#一番最初のユーザー作成
+  def usercreate　#一番最初のユーザー作成
+    #json形式でデータが送られrてくることを想定
+    #なぜかメソッドが実行されていないようなのでここは一時保留
     @json_request = JSON.parse(request.body.read)
     name = @json_request["name"]
     email = @json_request["email"]
@@ -93,6 +94,7 @@ end
   end
 
   def destroy
+    #名前からユーザーを削除
     @name = params[:name]
     User.find_by(name:params[:name]).destroy
     #curl -X DELETE http://localhost:3000/home/destroy/imamura
