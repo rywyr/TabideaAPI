@@ -34,14 +34,6 @@ ActiveRecord::Schema.define(version: 2018_10_11_125703) do
     t.index ["event_id"], name: "index_mmos_on_event_id"
   end
 
-  create_table "names", force: :cascade do |t|
-    t.string "event"
-    t.string "eventname"
-    t.string "explain"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "userevents", force: :cascade do |t|
     t.integer "user_id"
     t.integer "event_id"
@@ -52,9 +44,9 @@ ActiveRecord::Schema.define(version: 2018_10_11_125703) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
+    t.string "uuid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "uuid"
   end
 
   add_foreign_key "mmos", "events"

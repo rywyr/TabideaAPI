@@ -88,7 +88,7 @@ end
     name = @json_request["name"]
     email = @json_request["email"]
     uuid = @json_request["uuid"]
-    User.create(name: name,email: email)
+    User.create(name: name,email: email,uuid: uuid)
     #curl https://quiet-sands-57575.herokuapp.com/home/jcre -X POST -H "Content-Type: application/json" -d "{\"user\":{\"name\": \"ichikawa\",\"email\": \"sdfsdf@mail\"}}"
   end
 
