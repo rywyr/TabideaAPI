@@ -26,6 +26,12 @@ class EventController < ApplicationController
             eventlist[num] = {"id":ev.id,"title":ev.eventname,"explain":ev.explain}
             num = num + 1
         end
-    render:json => eventlist
+        render:json => eventlist
+    end
+
+    def join #ユーザーがイベントに参加する処理
+        @user_id = User.find_by(user_id:params[:user_id])
+        @event_id = Event.find_by(event_id:params[:event_id])
+        Userevent.create(user_id: @user_id,event_id: @event_id)
     end
 end
