@@ -100,7 +100,7 @@ class HomeController < ApplicationController
     #curl -X DELETE http://localhost:3000/home/destroy/imamura
   end
 
-  def edit
+  def edit 
       @json_request = JSON.parse(request.body.read)#ハッシュ
       id = @json_request["id"]
       @user = User.find(id); #レコード自体が入っている(データベースのデータ)
