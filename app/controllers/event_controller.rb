@@ -3,19 +3,12 @@ class EventController < ApplicationController
 
     def create
         @json_request = JSON.parse(request.body.read)
-        @user = User.find(params[:id])
+        @user = User.find(params[:user_id])
         eventname = @json_request["title"]
         explain = @json_request["explain"]
         @user.event.create(eventname: eventname,explain: explain)
 
-        #イベント作成後、ユーザーが所属するイベントリストの送信vbdbd
-        eve_array = Array.new
-        num = 0
-        @user.userevent.each do |ue| 
-           eve_array[num] = {"title":ue.event.eventname}
-           num= num + 1
-        end
-        render:json=>eve_array
+        redirect_to :action => :show, :id => params[:id]
     end
 
     def index
@@ -30,8 +23,32 @@ class EventController < ApplicationController
     end
 
     def join #ユーザーがイベントに参加する処理
-        @user_id = User.find_by(user_id:params[:user_id])
-        @event_id = Event.find_by(event_id:params[:event_id])
+        @user_id = params[:user_id]
+        @event_id = params[:event_id]
         Userevent.create(user_id: @user_id,event_id: @event_id)
+        redirect_to :action => "show"    
+    end
+
+    def show
+        #イベントに参加後そのユーザーが所属するイベントリストの送信
+        @user = User.find(params[:user_id])
+        #@event = Event.find(@event_id)
+
+        eve_array = Array.new
+        enum = 0
+        @user.userevent.each do |ue|
+            #イベントに所属するメンバーの配列
+            @event = ue.event
+            member_array = Array.new
+            mnum = 0
+            @event.userevent.each do |ue|
+                member_array[mnum] = ue.user.id
+                mnum = mnum + 1
+            end
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.eventname,"member":member_array}
+           enum = enum + 1
+        end
+        render:json=>eve_array
+
     end
 end

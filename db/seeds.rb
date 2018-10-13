@@ -17,12 +17,12 @@ end
 #User.create(name: 'Potter', email: array[2])
 
 
-#Userevent.create(user_id:1,event_id:1)
-#Userevent.create(user_id:2,event_id:3)
+Userevent.create(user_id:1,event_id:1)
+Userevent.create(user_id:2,event_id:3)
 Userevent.create(user_id:2,event_id:2)
-#Userevent.create(user_id:3,event_id:3)
-#Userevent.create(user_id:4,event_id:3)
-#Userevent.create(user_id:5,event_id:3)
+Userevent.create(user_id:3,event_id:3)
+Userevent.create(user_id:4,event_id:3)
+Userevent.create(user_id:5,event_id:3)
 
 #Event.create(eventname:"福岡",explain:"おいしい")
 #Event.create(eventname:"佐賀",explain:"鏡山")
