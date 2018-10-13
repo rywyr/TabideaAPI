@@ -12,7 +12,7 @@ class HomeController < ApplicationController
   #edit:受け取ったjsonからデータを編集して、アップデート
 
 
-  def top #topにおける裏の処理を担当（モデルに対する処理の命令）
+  def top #デバッグ用一覧表示（後ほど消す）
     @user = User.all
     @event = Event.all
     @userevent = Userevent.all
@@ -29,7 +29,7 @@ class HomeController < ApplicationController
       mem_array = Array.new
       eventid = ue.event.id
       
-      #MMO配列の作成
+      #MMO配列の作成しました
       j = 0
       Mmo.all.each do |mmoeve| #個々の処理もうちょっと何とかできるはず
         if(mmoeve.event_id == eventid)
@@ -56,16 +56,10 @@ class HomeController < ApplicationController
 		  "id": @user.id,
 		  "name": @user.name,
       "eventList":eve_array #memberをjsaonに追加
-      #MMOリストを返せるようにしてみる
 	  }
     render:json => user
     #curl http://localhost:3000/home/index/2 -X POST -H "Content-Type: application/json"
     #curl http://quiet-sands-57575.herokuapp.com/home/index/2 -X POST -H "Content-Type: application/json"
-  end
-
-  def new #いらん
-    @user = User.new
-    @event = Event.new
   end
 
   def create #いらん
@@ -82,7 +76,7 @@ class HomeController < ApplicationController
     render:json => @user
   end
 
-  def usercreate　#一番最初のユーザー作成
+  def usercreate#一番最初のユーザー作成
     #json形式でデータが送られrてくることを想定
     #なぜかメソッドが実行されていないようなのでここは一時保留
     @json_request = JSON.parse(request.body.read)
@@ -90,6 +84,7 @@ class HomeController < ApplicationController
     email = @json_request["email"]
     uuid = @json_request["uuid"]
     User.create(name: name,email: email,uuid: uuid)
+    render:json => {"name":name,"email":email,"uuid":uuid}
     #curl https://quiet-sands-57575.herokuapp.com/home/jcre -X POST -H "Content-Type: application/json" -d "{\"user\":{\"name\": \"ichikawa\",\"email\": \"sdfsdf@mail\"}}"
   end
 
@@ -97,6 +92,8 @@ class HomeController < ApplicationController
     #名前からユーザーを削除
     @name = params[:name]
     User.find_by(name:params[:name]).destroy
+
+    render:json =>{"name":@name}
     #curl -X DELETE http://localhost:3000/home/destroy/imamura
   end
 
@@ -105,6 +102,8 @@ class HomeController < ApplicationController
       id = @json_request["id"]
       @user = User.find(id); #レコード自体が入っている(データベースのデータ)
       @user.update_attributes(name: @json_request["name"],email: @json_request["email"],uuid: @json_request["uuid"])
+
+      render:json =>{"name": @json_request["name"],"email": @json_request["email"],"uuid": @json_request["uuid"]}
       #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"
       #curl httphttps://quiet-sands-57575.herokuapp.com/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"izawa\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\",\"uuid\":\"izawan\"}"
   end
