@@ -8,7 +8,7 @@ class EventController < ApplicationController
         explain = @json_request["explain"]
         @user.event.create(eventname: eventname,explain: explain)
 
-        #イベント作成後、ユーザーが所属するイベントリストの送信
+        #イベント作成後、ユーザーが所属するイベントリストの送信vbdbd
         eve_array = Array.new
         num = 0
         @user.userevent.each do |ue| 
