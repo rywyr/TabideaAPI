@@ -11,21 +11,19 @@ Rails.application.routes.draw do
 
   post 'event/create/:user_id' => 'event#create'
   get 'event/index'
+<<<<<<< HEAD
   get 'event/join/:user_id/:event_id' => 'event#join'
   get 'event/show/:user_id/:event_id' => 'event#show'
   get 'event/show/:user_id' => 'event#show'
+=======
+  get 'event/join/:user_id/:event_id' =>'event#join'
+>>>>>>> bcb70893976d0d73dc3746b242f4835a4504f813
 
   get 'home/top'
-  get 'home/index'
   get 'home/index/:uuid' => 'home#index'
   post 'home/edit'
-  post 'home/create'
-  post 'home/usercreate'
+  post 'home/usercreate' => 'home#usercreate'
   delete 'home/destroy/:name' =>'home#destroy'
-  get 'home/destroy'
-  get 'home/new'
-  get 'home/show'
-  get 'home/show/:id' => 'home#show'
 
   root 'application#hello'
 end

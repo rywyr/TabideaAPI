@@ -1,14 +1,25 @@
 class EventController < ApplicationController
     skip_before_action :verify_authenticity_token
 
-    def create
+    def create #ユーザーが新しいイベントを追加
         @json_request = JSON.parse(request.body.read)
         @user = User.find(params[:user_id])
         eventname = @json_request["title"]
         explain = @json_request["explain"]
         @user.event.create(eventname: eventname,explain: explain)
 
+<<<<<<< HEAD
         redirect_to :action => :show, :id => params[:id]
+=======
+        #イベント作成後、ユーザーが所属するイベントリストの送信
+        eve_array = Array.new
+        num = 0
+        @user.userevent.each do |ue| 
+           eve_array[num] = {"title":ue.event.eventname}
+           num= num + 1
+        end
+        render:json=>eve_array
+>>>>>>> bcb70893976d0d73dc3746b242f4835a4504f813
     end
 
     def index
@@ -22,6 +33,7 @@ class EventController < ApplicationController
         render:json => eventlist
     end
 
+<<<<<<< HEAD
     def join #ユーザーがイベントに参加する処理
         @user_id = params[:user_id]
         @event_id = params[:event_id]
@@ -50,5 +62,12 @@ class EventController < ApplicationController
         end
         render:json=>eve_array
 
+=======
+    def join #ユーザーが既存のイベントに参加
+        @user_id = params[:user_id]
+        @event_id = params[:event_id]
+        Userevent.create(user_id: @user_id,event_id: @event_id)
+        render:json => {"user_id": @user_id,"event_id": @event_id}
+>>>>>>> bcb70893976d0d73dc3746b242f4835a4504f813
     end
 end
