@@ -11,13 +11,9 @@ Rails.application.routes.draw do
 
   post 'event/create/:user_id' => 'event#create'
   get 'event/index'
-<<<<<<< HEAD
   get 'event/join/:user_id/:event_id' => 'event#join'
   get 'event/show/:user_id/:event_id' => 'event#show'
   get 'event/show/:user_id' => 'event#show'
-=======
-  get 'event/join/:user_id/:event_id' =>'event#join'
->>>>>>> bcb70893976d0d73dc3746b242f4835a4504f813
 
   get 'home/top'
   get 'home/index/:uuid' => 'home#index'
