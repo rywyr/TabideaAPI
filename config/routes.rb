@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'rooms/show'
+  mount ActionCable.server => '/cable'
+ 
   get 'mmocontroller/top'
   get 'mmocontroller/index'
   post 'mmocontroller/create'
