@@ -8,7 +8,7 @@ class EventController < ApplicationController
         explain = @json_request["explain"]
         @user.event.create(eventname: eventname,explain: explain)
 
-        #redirect_to :action => "show"
+        redirect_to :action => "show"
     end
 
     def index
@@ -27,7 +27,7 @@ class EventController < ApplicationController
         @event_id = params[:event_id]
         Userevent.create(user_id: @user_id,event_id: @event_id)
         
-        #redirect_to :action => "show"    
+        redirect_to :action => "show"    
     end
 
     def show
