@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   get 'home/top'
   get 'home/index/:uuid' => 'home#index'
+  get 'home/show/:uuid' => 'home#show'
   post 'home/edit'
   post 'home/usercreate' => 'home#usercreate'
   delete 'home/destroy/:name' =>'home#destroy'

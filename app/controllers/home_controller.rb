@@ -55,7 +55,7 @@ class HomeController < ApplicationController
     user = {
 		  "id": @user.id,
 		  "name": @user.name,
-      "eventList":eve_array #memberをjsaonに追加
+      "eventList":eve_array #memberをjsonに追加
 	  }
     render:json => user
     #curl http://localhost:3000/home/index/2 -X POST -H "Content-Type: application/json"
@@ -70,10 +70,13 @@ class HomeController < ApplicationController
       #curl http://localhost:3000/home/create -X POST -H "Content-Type: application/json" -d "{"user":{"name": "ainz","email": "abs@mail"}}"
   end
 
-  def show　#いらない？
-    @id = params[:id]
-    @user = User.find(params[:id])
-    render:json => @user
+  def show
+    @user = User.find_by(uuid:params[:uuid])
+    user = {
+		  "id" => @user.id,
+		  "name" => @user.name
+	  }
+    render:json => user
   end
 
   def usercreate#一番最初のユーザー作成
