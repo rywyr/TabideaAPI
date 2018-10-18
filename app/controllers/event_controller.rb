@@ -10,7 +10,7 @@ class EventController < ApplicationController
 
         event = {
 		  "id" => @event.id,
-		  "eventname" => @event.eventname
+		  "title" => @event.eventname
 	    }
          render:json => event       
     end
