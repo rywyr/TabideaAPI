@@ -102,9 +102,8 @@ class HomeController < ApplicationController
 
   def edit 
       @json_request = JSON.parse(request.body.read)#ハッシュ
-      id = @json_request["id"]
-      @user = User.find(id); #レコード自体が入っている(データベースのデータ)
-      @user.update_attributes(name: @json_request["name"],email: @json_request["email"],uuid: @json_request["uuid"])
+      @user = User.find(params[:id]); #レコード自体が入っている(データベースのデータ)
+      @user.update_attributes(name: @json_request["name"])
 
       render:json =>{"name": @json_request["name"],"email": @json_request["email"],"uuid": @json_request["uuid"]}
       #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"

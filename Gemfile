@@ -59,3 +59,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'therubyracer', platforms: :ruby
 
 gem 'swagger-blocks'
+
+gem 'devise'

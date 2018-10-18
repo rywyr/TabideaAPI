@@ -16,8 +16,8 @@ ActiveRecord::Schema.define(version: 2018_10_11_125703) do
   enable_extension "plpgsql"
 
   create_table "events", force: :cascade do |t|
-    t.string "eventname"
-    t.string "explain"
+    t.string "eventname", null: false
+    t.string "eventpass", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

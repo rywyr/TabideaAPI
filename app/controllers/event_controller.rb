@@ -5,10 +5,14 @@ class EventController < ApplicationController
         @json_request = JSON.parse(request.body.read)
         @user = User.find(params[:user_id])
         eventname = @json_request["title"]
-        explain = @json_request["explain"]
-        @user.event.create(eventname: eventname,explain: explain)
+        eventpass = @json_request["eventpass"]
+        @event = @user.event.create(eventname: eventname,eventpass: eventpass)
 
-        redirect_to :action => "show"
+        event = {
+		  "id" => @event.id,
+		  "eventname" => @event.eventname
+	    }
+         render:json => event       
     end
 
     def index
@@ -16,7 +20,7 @@ class EventController < ApplicationController
         eventlist = Array.new
         num = 0
         @event.each do |ev|
-            eventlist[num] = {"id":ev.id,"title":ev.eventname,"explain":ev.explain}
+            eventlist[num] = {"id":ev.id,"title":ev.eventname,"eventpass":ev.eventpass}
             num = num + 1
         end
         render:json => eventlist
