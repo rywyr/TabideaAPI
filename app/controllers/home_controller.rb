@@ -193,7 +193,7 @@ class HomeController < ApplicationController
   EDOC
   def edit 
       @json_request = JSON.parse(request.body.read)#ハッシュ
-      @user = User.find(params[:id]); #レコード自体が入っている(データベースのデータ)
+      @user = User.find(params[:uuid]); #レコード自体が入っている(データベースのデータ)
       @user.update_attributes(name: @json_request["name"],email: @json_request["email"],uuid: @json_request["uuid"])
 
       render:json =>{"name": @json_request["name"],"email": @json_request["email"],"uuid": @json_request["uuid"]}

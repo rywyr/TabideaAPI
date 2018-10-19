@@ -16,18 +16,16 @@ User.create(name: 'Peter', email: array[0],uuid:'nabe')
 User.create(name: 'Patola', email: array[1],uuid:'izawa')
 User.create(name: 'Potter', email: array[2],uuid:'tsubasa')
 
-Event.create(eventname:"福岡",eventpass:"abab")
-Event.create(eventname:"佐賀",eventpass:"adad")
-Event.create(eventname:"長崎",eventpass:"aeae")
 
-Userevent.create(user_id:1,event_id:1)
-Userevent.create(user_id:2,event_id:3)
-Userevent.create(user_id:2,event_id:2)
-Userevent.create(user_id:3,event_id:3)
-Userevent.create(user_id:4,event_id:3)
-Userevent.create(user_id:5,event_id:3)
+#Event.create(eventname:"福岡",eventpass:"abab")
+#Event.create(eventname:"佐賀",eventpass:"adad")
+#Event.create(eventname:"長崎",eventpass:"aeae")
 
-Mmo.create(text:"旅行",parent:0,xposition:0.1,yposition:0.2,event_id:1,viewIndex:0)
-Mmo.create(text:"福岡",parent:1,xposition:0.1,yposition:0.2,event_id:1,viewIndex:1)
-Mmo.create(text:"長崎",parent:1,xposition:0.1,yposition:0.2,event_id:3,viewIndex:1)
+#Userevent.create(user_id:1,event_id:1)
+#Userevent.create(user_id:2,event_id:3)
+#Userevent.create(user_id:2,event_id:2)
+#Userevent.create(user_id:3,event_id:3)
+#Userevent.create(user_id:4,event_id:3)
+#Userevent.create(user_id:5,event_id:3)
+
 
