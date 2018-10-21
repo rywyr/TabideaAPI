@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'rooms/show'
+  mount ActionCable.server => '/cable'
+ 
   get 'mmocontroller/top'
   get 'mmocontroller/index'
   post 'mmocontroller/create'
@@ -9,21 +12,18 @@ Rails.application.routes.draw do
   delete 'mmocontroller/destroy/:id'=>'mmocontroller#destroy'
   post 'mmocontroller/edit'
 
-  post 'event/create/:id' => 'event#create'
+  post 'event/create/:user_id' => 'event#create'
   get 'event/index'
-  get 'event/join/:user_id/:event_id' =>'home#top'
+  get 'event/join/:user_id/:event_id' => 'event#join'
+  get 'event/show/:user_id/:event_id' => 'event#show'
+  get 'event/show/:user_id' => 'event#show'
 
   get 'home/top'
-  get 'home/index'
   get 'home/index/:uuid' => 'home#index'
-  post 'home/edit'
-  post 'home/create'
-  post 'home/usercreate'
+  get 'home/show/:uuid' => 'home#show'
+  post 'home/edit/:id' => 'home#edit'
+  post 'home/usercreate' => 'home#usercreate'
   delete 'home/destroy/:name' =>'home#destroy'
-  get 'home/destroy'
-  get 'home/new'
-  get 'home/show'
-  get 'home/show/:id' => 'home#show'
 
   root 'application#hello'
 end
