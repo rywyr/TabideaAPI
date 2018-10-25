@@ -160,23 +160,24 @@ class HomeController < ApplicationController
     render:json => {"name":name,"email":email,"uuid":uuid}
     #curl https://quiet-sands-57575.herokuapp.com/home/jcre -X POST -H "Content-Type: application/json" -d "{\"user\":{\"name\": \"ichikawa\",\"email\": \"sdfsdf@mail\"}}"
   end
-  api :DELETE, '/home/destroy/:name', 'ユーザ情報の消去'
-  description '指定の名前ユーザ情報を消去します。'
+  api :DELETE, '/home/destroy/:id', 'ユーザ情報の消去'
+  description '指定IDのユーザ情報を消去します。'
   formats ['json']
   error code: 401, description: 'Unauthorized'
   error code: 404, description: 'Not Found'
   error code: 400, description: 'Invalid parameter'
 
   example <<-EDOC
-  $ #curl -X DELETE http://localhost:3000/home/destroy/imamura
+  $ #curl -X DELETE http://localhost:3000/home/destroy/:id
         
   EDOC
   def destroy
-    #名前からユーザーを削除
-    @name = params[:name]
-    User.find_by(name:params[:name]).destroy
+    #IDからユーザーを削除
+    @user = User.find(params[:id])
+    @user.destroy
 
-    render:json =>{"name":@name}
+    @users = User.all
+    render:json => @users
     #curl -X DELETE http://localhost:3000/home/destroy/imamura
   end
 

@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get 'home/allusers'
   post 'home/edit/:id' => 'home#edit'
   post 'home/usercreate' => 'home#usercreate'
-  delete 'home/destroy/:name' =>'home#destroy'
+  delete 'home/destroy/:id' =>'home#destroy'
 
   root 'application#hello'
 end
