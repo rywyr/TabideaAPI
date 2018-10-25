@@ -175,8 +175,8 @@ class HomeController < ApplicationController
     #curl -X DELETE http://localhost:3000/home/destroy/imamura
   end
 
-  api :POST, '/home/edit/:uuid', 'ユーザ情報の編集'
-  description '指定のUUIDのユーザ情報を編集します'
+  api :POST, '/home/edit/:id', 'ユーザ情報の編集'
+  description '指定のIDのユーザ情報を編集します'
   formats ['json']
   error code: 401, description: 'Unauthorized'
   error code: 404, description: 'Not Found'
@@ -188,15 +188,14 @@ class HomeController < ApplicationController
       {
         "id":5,"name":"izawa",
         "email":"sdfsdfsdfsfsdfsdfsfa",
-        "uuid":"izawan"
       }
   EDOC
   def edit 
       @json_request = JSON.parse(request.body.read)#ハッシュ
-      @user = User.find(params[:uuid]); #レコード自体が入っている(データベースのデータ)
-      @user.update_attributes(name: @json_request["name"],email: @json_request["email"],uuid: @json_request["uuid"])
-
-      render:json =>{"name": @json_request["name"],"email": @json_request["email"],"uuid": @json_request["uuid"]}
+      @user = User.find(params[:id]); #レコード自体が入っている(データベースのデータ)
+      @user.update_attributes(name: @json_request["name"],email: @json_request["email"],uuid: @user.uuid)
+      #@user.update_attributes(name: @json_request["name"])
+      render:json => @user
       #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"
       #curl httphttps://quiet-sands-57575.herokuapp.com/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"izawa\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\",\"uuid\":\"izawan\"}"
   end
