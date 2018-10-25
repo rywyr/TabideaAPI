@@ -128,6 +128,11 @@ class HomeController < ApplicationController
     render:json => user
   end
 
+  def allusers
+    @users = User.all
+    render:json => @users
+  end
+
   api :POST, '/home/usercreate', 'ユーザーを作成'
   description 'POSTされたjsonをもとにユーザーを作成します。'
   formats ['json']
