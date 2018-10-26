@@ -17,9 +17,9 @@ User.create(name: 'Patola', email: array[1],uuid:'izawa')
 User.create(name: 'Potter', email: array[2],uuid:'tsubasa')
 
 
-#Event.create(eventname:"福岡",eventpass:"abab")
-#Event.create(eventname:"佐賀",eventpass:"adad")
-#Event.create(eventname:"長崎",eventpass:"aeae")
+Event.create(eventname:"福岡",encrypted_password:"abab")
+Event.create(eventname:"佐賀",encrypted_password:"adad")
+Event.create(eventname:"長崎",encrypted_password:"aeae")
 
 #Userevent.create(user_id:1,event_id:1)
 #Userevent.create(user_id:2,event_id:3)

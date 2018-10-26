@@ -175,4 +175,14 @@ class EventController < ApplicationController
         render:json=>eve_array
 
     end
+
+    private
+
+    def sign_up_params
+      params.permit(:title, :email, :eventpass, :password_confirmation)
+    end
+ 
+    def account_update_params
+      params.permit(:id,:eventname)
+    end
 end

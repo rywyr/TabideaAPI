@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :events
   apipie
   get 'rooms/show'
   mount ActionCable.server => '/cable'
