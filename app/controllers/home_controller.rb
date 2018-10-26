@@ -156,8 +156,9 @@ class HomeController < ApplicationController
     name = @json_request["name"]
     email = @json_request["email"]
     uuid = @json_request["uuid"]
-    User.create(name: name,email: email,uuid: uuid)
-    render:json => {"name":name,"email":email,"uuid":uuid}
+    @user = User.create(name: name,email: email,uuid: uuid)
+    redirect_to :action => "show" ,uuid: @user.uuid
+    #render:json => {"name":name,"email":email,"uuid":uuid}
     #curl https://quiet-sands-57575.herokuapp.com/home/jcre -X POST -H "Content-Type: application/json" -d "{\"user\":{\"name\": \"ichikawa\",\"email\": \"sdfsdf@mail\"}}"
   end
   api :DELETE, '/home/destroy/:id', 'ユーザ情報の消去'
