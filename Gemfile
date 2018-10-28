@@ -58,6 +58,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'therubyracer', platforms: :ruby
 
-gem 'swagger-blocks'
+gem 'apipie-rails', :github => 'Apipie/apipie-rails'
+
+# for Markdown
+gem 'maruku'
 
 gem 'devise'
