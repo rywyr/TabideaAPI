@@ -67,7 +67,7 @@ class EventController < ApplicationController
         eventlist = Array.new
         num = 0
         @event.each do |ev|
-            eventlist[num] = {"id":ev.id,"title":ev.title,"eventpass":ev.password_digest}
+            eventlist[num] = {"id":ev.id,"title":ev.title,"password":ev.password_digest}
             num = num + 1
         end
         render:json => eventlist
