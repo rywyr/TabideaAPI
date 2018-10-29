@@ -36,13 +36,14 @@ class EventController < ApplicationController
     def create #ユーザーが新しいイベントを追加
         @json_request = JSON.parse(request.body.read)
         @user = User.find(params[:user_id])
-        eventname = @json_request["title"]
-        eventpass = @json_request["eventpass"]
-        @event = @user.event.create(eventname: eventname,eventpass: eventpass)
+        title = @json_request["title"]
+        password = SecureRandom.hex
+        @event = @user.event.create(title: title,password_digest: password)
 
         event = {
 		  "id" => @event.id,
-		  "title" => @event.eventname
+          "title" => @event.title,
+          "password" => @event.password_digest
 	    }
          render:json => event       
     end
@@ -66,7 +67,7 @@ class EventController < ApplicationController
         eventlist = Array.new
         num = 0
         @event.each do |ev|
-            eventlist[num] = {"id":ev.id,"title":ev.eventname,"eventpass":ev.eventpass}
+            eventlist[num] = {"id":ev.id,"title":ev.title,"eventpass":ev.password_digest}
             num = num + 1
         end
         render:json => eventlist
@@ -169,7 +170,7 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.eventname,"member":member_array}
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"member":member_array}
            enum = enum + 1
         end
         render:json=>eve_array
