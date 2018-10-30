@@ -109,6 +109,7 @@ class EventController < ApplicationController
             }
         ]
     EDOC
+    
     def join #ユーザーがイベントに参加する処理
         @user_id = params[:user_id]
         @event_id = params[:event_id]
@@ -117,7 +118,7 @@ class EventController < ApplicationController
         redirect_to :action => "show"    
     end
 
-    api :GET, '/event/join/:user_id', 'ユーザーが参加するすべてのイベントの表示'
+    api :GET, '/event/show/:user_id', 'ユーザーが参加するすべてのイベントの表示'
     description 'pathの情報をもとにユーザーを探し、そのユーザーが参加するイベント情報を返します。'
     formats ['json']
     error code: 401, description: 'Unauthorized'
@@ -130,6 +131,7 @@ class EventController < ApplicationController
          {
              "id": 1,
              "title": "福岡",
+             "password":"aaaaaa",
              "member": [
                      1
              ]
@@ -137,6 +139,7 @@ class EventController < ApplicationController
          {
              "id": 8,
              "title": "tsubasa",
+             "password":"bbbbbbb",
              "member": [
                    1
              ]
@@ -144,6 +147,7 @@ class EventController < ApplicationController
         {
             "id": 3,
             "title": "長崎",
+            "password":"ccccccc",
             "member": [
                     2,
                     3,
