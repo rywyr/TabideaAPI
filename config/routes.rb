@@ -5,7 +5,7 @@ Rails.application.routes.draw do
  
   post 'event/create/:user_id' => 'event#create'
   get 'event/index'
-  get 'event/join/:user_id/:event_id' => 'event#join'
+  post 'event/join/:user_id/:event_id' => 'event#join'
   get 'event/show/:user_id/:event_id' => 'event#show'
   get 'event/show/:user_id' => 'event#show'
 
