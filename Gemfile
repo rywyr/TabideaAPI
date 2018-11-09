@@ -64,3 +64,5 @@ gem 'apipie-rails', :github => 'Apipie/apipie-rails'
 gem 'maruku'
 
 gem 'devise'
+
+gem 'bcrypt'

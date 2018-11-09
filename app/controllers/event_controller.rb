@@ -36,13 +36,14 @@ class EventController < ApplicationController
     def create #ユーザーが新しいイベントを追加
         @json_request = JSON.parse(request.body.read)
         @user = User.find(params[:user_id])
-        eventname = @json_request["title"]
-        eventpass = @json_request["eventpass"]
-        @event = @user.event.create(eventname: eventname,eventpass: eventpass)
+        title = @json_request["title"]
+        randompassword = SecureRandom.hex
+        @event = @user.event.create(title: title,password: randompassword)
 
         event = {
 		  "id" => @event.id,
-		  "title" => @event.eventname
+          "title" => @event.title,
+          "password" => randompassword
 	    }
          render:json => event       
     end
@@ -66,12 +67,12 @@ class EventController < ApplicationController
         eventlist = Array.new
         num = 0
         @event.each do |ev|
-            eventlist[num] = {"id":ev.id,"title":ev.eventname,"eventpass":ev.eventpass}
+            eventlist[num] = {"id":ev.id,"title":ev.title,"password":ev.password_digest}
             num = num + 1
         end
         render:json => eventlist
     end
-    api :GET, '/event/join/:user_id/:event_id', 'イベントへの参加'
+    api :POST, '/event/join/:user_id/:event_id', 'イベントへの参加'
     description 'pathの情報をもとにイベントへと参加し、参加したイベント情報を返します。'
     formats ['json']
     error code: 401, description: 'Unauthorized'
@@ -108,15 +109,22 @@ class EventController < ApplicationController
             }
         ]
     EDOC
+    
     def join #ユーザーがイベントに参加する処理
+        @json_request = JSON.parse(request.body.read)
         @user_id = params[:user_id]
         @event_id = params[:event_id]
-        Userevent.create(user_id: @user_id,event_id: @event_id)
-        
-        redirect_to :action => "show"    
+        password = @json_request[:password]
+        @event = Event.find(params[:event_id])
+        if  @event.authenticate(params[:password])
+          Userevent.create(user_id: @user_id,event_id: @event_id)
+          redirect_to :action => "show"
+        else
+          response_unauthorized(:event, :jon)
+        end
     end
 
-    api :GET, '/event/join/:user_id', 'ユーザーが参加するすべてのイベントの表示'
+    api :GET, '/event/show/:user_id', 'ユーザーが参加するすべてのイベントの表示'
     description 'pathの情報をもとにユーザーを探し、そのユーザーが参加するイベント情報を返します。'
     formats ['json']
     error code: 401, description: 'Unauthorized'
@@ -129,6 +137,7 @@ class EventController < ApplicationController
          {
              "id": 1,
              "title": "福岡",
+             "password":"aaaaaa",
              "member": [
                      1
              ]
@@ -136,6 +145,7 @@ class EventController < ApplicationController
          {
              "id": 8,
              "title": "tsubasa",
+             "password":"bbbbbbb",
              "member": [
                    1
              ]
@@ -143,6 +153,7 @@ class EventController < ApplicationController
         {
             "id": 3,
             "title": "長崎",
+            "password":"ccccccc",
             "member": [
                     2,
                     3,
@@ -169,7 +180,7 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.eventname,"member":member_array}
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"password":ue.event.password_digest,"member":member_array}
            enum = enum + 1
         end
         render:json=>eve_array
