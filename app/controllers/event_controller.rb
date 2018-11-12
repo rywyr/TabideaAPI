@@ -186,4 +186,30 @@ class EventController < ApplicationController
         render:json=>eve_array
 
     end
+    api :DELETE, '/event/destroy/:id', 'イベント情報の消去'
+  description '指定IDのイベント情報を消去します。'
+  formats ['json']
+  error code: 401, description: 'Unauthorized'
+  error code: 404, description: 'Not Found'
+  error code: 400, description: 'Invalid parameter'
+
+  example <<-EDOC
+  $ #curl -X DELETE http://localhost:3000/home/destroy/:id
+        
+  EDOC
+  def destroy
+    #IDからイベントを削除
+    @event = Event.find(params[:event_id])
+    @event.destroy
+
+    @events = Event.all
+    render:json => @events
+    #curl -X DELETE http://localhost:3000/event/destroy/:event_id
+  end
+
+  def search
+    password = encrypt.params[:password]
+    @event = Event.find_by(password)
+    render:json => @event
+  end
 end
