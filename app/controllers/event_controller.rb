@@ -186,8 +186,8 @@ class EventController < ApplicationController
         render:json=>eve_array
 
     end
-    api :DELETE, '/event/destroy/:id', 'ユーザ情報の消去'
-  description '指定IDのユーザ情報を消去します。'
+    api :DELETE, '/event/destroy/:id', 'イベント情報の消去'
+  description '指定IDのイベント情報を消去します。'
   formats ['json']
   error code: 401, description: 'Unauthorized'
   error code: 404, description: 'Not Found'
