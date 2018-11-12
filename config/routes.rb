@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post 'event/join/:user_id/:event_id' => 'event#join'
   get 'event/show/:user_id/:event_id' => 'event#show'
   get 'event/show/:user_id' => 'event#show'
+  delete 'event/destroy/:event_id' => 'event#destroy'
 
   get 'home/top'
   get 'home/index/:uuid' => 'home#index'
