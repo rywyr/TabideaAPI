@@ -206,4 +206,10 @@ class EventController < ApplicationController
     render:json => @events
     #curl -X DELETE http://localhost:3000/event/destroy/:event_id
   end
+
+  def search
+    password = encrypt.params[:password]
+    @event = Event.find_by(password)
+    render:json => @event
+  end
 end

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'event/show/:user_id/:event_id' => 'event#show'
   get 'event/show/:user_id' => 'event#show'
   delete 'event/destroy/:event_id' => 'event#destroy'
+  get 'event/search/:password' => 'event#search'
 
   get 'home/top'
   get 'home/index/:uuid' => 'home#index'
