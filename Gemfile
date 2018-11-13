@@ -66,3 +66,5 @@ gem 'maruku'
 gem 'devise'
 
 gem 'bcrypt'
+
+gem 'rotp'
