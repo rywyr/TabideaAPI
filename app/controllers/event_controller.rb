@@ -42,8 +42,7 @@ class EventController < ApplicationController
 
         event = {
 		  "id" => @event.id,
-          "title" => @event.title,
-          "password" => randompassword
+          "title" => @event.title
 	    }
          render:json => event       
     end
@@ -72,15 +71,15 @@ class EventController < ApplicationController
         end
         render:json => eventlist
     end
-    api :POST, '/event/join/:user_id/:event_id', 'イベントへの参加'
-    description 'pathの情報をもとにイベントへと参加し、参加したイベント情報を返します。'
+    api :GET, '/:token/:user_id', 'イベントへの参加'
+    description 'invitationにより作成されたURLへとGETすることでイベントへと参加し、参加したイベント情報を返します。'
     formats ['json']
     error code: 401, description: 'Unauthorized'
     error code: 404, description: 'Not Found'
     error code: 400, description: 'Invalid parameter'
 
      example <<-EDOC
-     $ curl http://localhost:3000/event/join/:user_id/:event_id
+     $ curl http://localhost:3000/:token/:user_id
         [
              {
                  "id": 1,
@@ -109,19 +108,43 @@ class EventController < ApplicationController
             }
         ]
     EDOC
-    
-    def join #ユーザーがイベントに参加する処理
-        @json_request = JSON.parse(request.body.read)
-        @user_id = params[:user_id]
-        @event_id = params[:event_id]
-        password = @json_request[:password]
-        @event = Event.find(params[:event_id])
-        if  @event.authenticate(params[:password])
-          Userevent.create(user_id: @user_id,event_id: @event_id)
-          redirect_to :action => "show"
-        else
-          response_unauthorized(:event, :jon)
+    #def join #ユーザーがイベントに参加する処理
+    #    @json_request = JSON.parse(request.body.read)
+    #    @user_id = params[:user_id]
+    #    @event_id = params[:event_id]
+    #    password = @json_request[:password]
+    #    @event = Event.find(params[:event_id])
+    #    if  @event.authenticate(params[:password])
+    #      Userevent.create(user_id: @user_id,event_id: @event_id)
+    #      redirect_to :action => "show"
+    #    else
+    #      response_unauthorized(:event, :jon)
+    #    end
+    #end
+    def join
+        #有効期限によるトークンの判断
+        @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:token])
+        id = @token.event_id
+        @token.update_attributes(expire_at: Time.now)
+        @event = Event.find(id)
+        @user = User.find_by(uuid: params[:uuid])
+        Userevent.create(user_id: @user.id,event_id: @event.id)
+        
+        eve_array = Array.new
+        enum = 0
+        @user.userevent.each do |ue|
+            #イベントに所属するメンバーの配列
+            @event = ue.event
+            member_array = Array.new
+            mnum = 0
+            @event.userevent.each do |ue|
+                member_array[mnum] = ue.user.id
+                mnum = mnum + 1
+            end
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"password":ue.event.password_digest,"member":member_array}
+           enum = enum + 1
         end
+        render:json=>eve_array
     end
 
     api :GET, '/event/show/:user_id', 'ユーザーが参加するすべてのイベントの表示'
@@ -180,13 +203,13 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"password":ue.event.password_digest,"member":member_array}
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"member":member_array}
            enum = enum + 1
         end
         render:json=>eve_array
 
     end
-    api :DELETE, '/event/destroy/:id', 'イベント情報の消去'
+  api :DELETE, '/event/destroy/:id', 'イベント情報の消去'
   description '指定IDのイベント情報を消去します。'
   formats ['json']
   error code: 401, description: 'Unauthorized'
@@ -206,10 +229,30 @@ class EventController < ApplicationController
     render:json => @events
     #curl -X DELETE http://localhost:3000/event/destroy/:event_id
   end
+  api :GET, '/event/invitation/:event_id', '招待URLの作成'
+  description 'イベントへと招待するためのURLを作成します。'
+  formats ['json']
+  error code: 401, description: 'Unauthorized'
+  error code: 404, description: 'Not Found'
+  error code: 400, description: 'Invalid parameter'
 
-  def search
-    password = encrypt.params[:password]
-    @event = Event.find_by(password)
-    render:json => @event
+  example <<-EDOC
+  $ #curl -X GET http://localhost:3000/event/inivitation/:event_id
+
+  EDOC
+  def invitation
+    @user = User.find(params[:user_id])
+    @token = @user.tokens.create(uuid: SecureRandom.uuid, expire_at: 24.hours.since, event_id: params[:event_id])
+    url = {
+		  "url" => "https://fast-peak-71769.herokuapp.com/#{@token.uuid}"
+	    }
+    render:json => url
+  end
+
+  def withdrawal
+    @userevent = Userevent.find_by(user_id: params[:user_id],event_id: params[:event_id])
+    @userevent.destroy
+
+    redirect_to :action => "show"
   end
 end
