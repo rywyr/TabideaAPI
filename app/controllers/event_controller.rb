@@ -42,8 +42,7 @@ class EventController < ApplicationController
 
         event = {
 		  "id" => @event.id,
-          "title" => @event.title,
-          "password" => randompassword
+          "title" => @event.title
 	    }
          render:json => event       
     end
@@ -72,15 +71,15 @@ class EventController < ApplicationController
         end
         render:json => eventlist
     end
-    api :POST, '/event/join/:user_id/:event_id', 'イベントへの参加'
-    description 'pathの情報をもとにイベントへと参加し、参加したイベント情報を返します。'
+    api :GET, '/:token/:user_id', 'イベントへの参加'
+    description 'invitationにより作成されたURLへとGETすることでイベントへと参加し、参加したイベント情報を返します。'
     formats ['json']
     error code: 401, description: 'Unauthorized'
     error code: 404, description: 'Not Found'
     error code: 400, description: 'Invalid parameter'
 
      example <<-EDOC
-     $ curl http://localhost:3000/event/join/:user_id/:event_id
+     $ curl http://localhost:3000/:token/:user_id
         [
              {
                  "id": 1,
@@ -204,13 +203,13 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"password":ue.event.password_digest,"member":member_array}
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"member":member_array}
            enum = enum + 1
         end
         render:json=>eve_array
 
     end
-    api :DELETE, '/event/destroy/:id', 'イベント情報の消去'
+  api :DELETE, '/event/destroy/:id', 'イベント情報の消去'
   description '指定IDのイベント情報を消去します。'
   formats ['json']
   error code: 401, description: 'Unauthorized'
@@ -230,7 +229,17 @@ class EventController < ApplicationController
     render:json => @events
     #curl -X DELETE http://localhost:3000/event/destroy/:event_id
   end
+  api :GET, '/event/invitation/:event_id', '招待URLの作成'
+  description 'イベントへと招待するためのURLを作成します。'
+  formats ['json']
+  error code: 401, description: 'Unauthorized'
+  error code: 404, description: 'Not Found'
+  error code: 400, description: 'Invalid parameter'
 
+  example <<-EDOC
+  $ #curl -X GET http://localhost:3000/event/inivitation/:event_id
+
+  EDOC
   def invitation
     @user = User.find(params[:user_id])
     @token = @user.tokens.create(uuid: SecureRandom.uuid, expire_at: 24.hours.since, event_id: params[:event_id])
