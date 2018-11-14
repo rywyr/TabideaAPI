@@ -43,6 +43,7 @@ class EventController < ApplicationController
         event = {
 		  "id" => @event.id,
           "title" => @event.title
+          "creater" => @user.name
 	    }
          render:json => event       
     end
