@@ -123,9 +123,10 @@ class EventController < ApplicationController
     #    end
     #end
     def join
-        @token = Token.where(['expired_at < ?', Time.now]).find_by(uuid: params[:token])
+        #有効期限によるトークンの判断
+        @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:token])
         id = @token.event_id
-        @token.update_attributes(expired_at: Time.now)
+        @token.update_attributes(expire_at: Time.now)
         @event = Event.find(id)
         @user = User.find_by(uuid: params[:uuid])
         Userevent.create(user_id: @user.id,event_id: @event.id)
