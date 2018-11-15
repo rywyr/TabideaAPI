@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get     'event/invitation/:user_id/:event_id' => 'event#invitation'
   get     'event/withdrawal/:user_id/:event_id' => 'event#withdrawal'
 
-  get     '/:token/:uuid' => 'event#join'
+  get     'event/:token/:uuid' => 'event#join'
 
   get     'home/top'
   get     'home/index/:uuid' => 'home#index'
