@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   delete  'event/destroy/:event_id' => 'event#destroy'
   get     'event/search/:password' => 'event#search'
   get     'event/invitation/:user_id/:event_id' => 'event#invitation'
+  get     'event/withdrawal/:user_id/:event_id' => 'event#withdrawal'
 
   get     '/:token/:uuid' => 'event#join'
 

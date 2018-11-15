@@ -37,9 +37,7 @@ class EventController < ApplicationController
         @json_request = JSON.parse(request.body.read)
         @user = User.find(params[:user_id])
         title = @json_request["title"]
-        randompassword = SecureRandom.hex
-        @event = @user.event.create(title: title,password: randompassword)
-
+        @event = @user.event.create(title: title,creator: @user.name)
         event = {
 		  "id" => @event.id,
           "title" => @event.title,
@@ -142,7 +140,7 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"password":ue.event.password_digest,"member":member_array}
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":ue.event.creator,"member":member_array}
            enum = enum + 1
         end
         render:json=>eve_array
@@ -204,7 +202,7 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"member":member_array}
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":ue.event.creator,"member":member_array}
            enum = enum + 1
         end
         render:json=>eve_array
