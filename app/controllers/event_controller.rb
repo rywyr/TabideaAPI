@@ -126,11 +126,7 @@ class EventController < ApplicationController
         id = @token.event_id
         @token.update_attributes(expire_at: Time.now)
         @event = Event.find(id)
-<<<<<<< HEAD
-        @user = User.find_by(uuid: params[:uuid])
-=======
         @user = User.find(params[:user_id])
->>>>>>> f200dc628d23cca376c86239c8950706b195197c
         Userevent.create(user_id: @user.id,event_id: @event.id)
         
         eve_array = Array.new
@@ -247,18 +243,6 @@ class EventController < ApplicationController
     @user = User.find(params[:user_id])
     @token = @user.tokens.create(uuid: SecureRandom.uuid, expire_at: 24.hours.since, event_id: params[:event_id])
     url = {
-<<<<<<< HEAD
-		  "url" => "https://fast-peak-71769.herokuapp.com/#{@token.uuid}"
-	    }
-    render:json => url
-  end
-
-  def withdrawal
-    @userevent = Userevent.find_by(user_id: params[:user_id],event_id: params[:event_id])
-    @userevent.destroy
-
-    redirect_to :action => "show"
-=======
 		  "url" => "https://fast-peak-71769.herokuapp.com/event/#{@token.uuid}"
 	    }
     render:json => url
@@ -272,6 +256,5 @@ class EventController < ApplicationController
         "title" => @event.title
     }
     render:json => title
->>>>>>> f200dc628d23cca376c86239c8950706b195197c
   end
 end
