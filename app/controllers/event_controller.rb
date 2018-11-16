@@ -243,7 +243,7 @@ class EventController < ApplicationController
     @user = User.find(params[:user_id])
     @token = @user.tokens.create(uuid: SecureRandom.uuid, expire_at: 24.hours.since, event_id: params[:event_id])
     url = {
-		  "url" => "https://fast-peak-71769.herokuapp.com/#{@token.uuid}"
+		  "url" => "https://fast-peak-71769.herokuapp.com/event/#{@token.uuid}"
 	    }
     render:json => url
   end
