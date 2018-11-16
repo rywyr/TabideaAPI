@@ -126,7 +126,7 @@ class EventController < ApplicationController
         id = @token.event_id
         @token.update_attributes(expire_at: Time.now)
         @event = Event.find(id)
-        @user = User.find_by(uuid: params[:uuid])
+        @user = User.find(params[:user_id])
         Userevent.create(user_id: @user.id,event_id: @event.id)
         
         eve_array = Array.new
@@ -251,7 +251,10 @@ class EventController < ApplicationController
   def withdrawal
     @userevent = Userevent.find_by(user_id: params[:user_id],event_id: params[:event_id])
     @userevent.destroy
-
-    redirect_to :action => "show"
+    @event = Event.find(params[:event_id])
+    title = {
+        "title" => @event.title
+    }
+    render:json => title
   end
 end
