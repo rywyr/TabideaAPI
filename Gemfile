@@ -65,4 +65,6 @@ gem 'maruku'
 
 gem 'devise'
 
+gem 'bitly'
+
 gem 'bcrypt'
