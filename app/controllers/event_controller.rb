@@ -37,7 +37,7 @@ class EventController < ApplicationController
         @json_request = JSON.parse(request.body.read)
         @user = User.find(params[:user_id])
         title = @json_request["title"]
-        @event = @user.event.create(title: title,creator: @user.name)
+        @event = @user.event.create(title: title,creator: @user.id)
         event = {
 		  "id" => @event.id,
           "title" => @event.title,
@@ -136,7 +136,8 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":ue.event.creator,"member":member_array}
+           @creator = User.find(ue.event.creator)
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":@creator.name,"member":member_array}
            enum = enum + 1
         end
         render:json=>eve_array
@@ -198,8 +199,9 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":ue.event.creator,"member":member_array}
-           enum = enum + 1
+            @creator = User.find(ue.event.creator)
+            eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":@creator.name,"member":member_array}
+            enum = enum + 1
         end
         render:json=>eve_array
 
@@ -253,7 +255,7 @@ class EventController < ApplicationController
       response_unauthorized(:event, :auth)
     else
       id = @token.event_id
-      @token.update_attributes(expire_at: Time.now)
+      #@token.update_attributes(expire_at: Time.now)
       @event = Event.find(id)
       event = {
 		  "id" => @event.id,
