@@ -242,8 +242,9 @@ class EventController < ApplicationController
   def invitation
     @user = User.find(params[:user_id])
     @token = @user.tokens.create(uuid: SecureRandom.uuid, expire_at: 24.hours.since, event_id: params[:event_id])
+    originalurl = "https://fast-peak-71769.herokuapp.com/event/#{@token.uuid}"
     url = {
-		  "url" => "https://fast-peak-71769.herokuapp.com/event/#{@token.uuid}"
+		  "url" => bitly_shorten(originalurl)
 	    }
     render:json => url
   end
@@ -257,4 +258,17 @@ class EventController < ApplicationController
     }
     render:json => title
   end
+
+private
+
+    require 'bitly'
+ 
+    def bitly_shorten(url)
+      Bitly.use_api_version_3
+      Bitly.configure do |config|
+        config.api_version = 3
+        config.access_token = "1338aaea0666996c77fd606b6261cae9e26b5a63"
+      end
+      Bitly.client.shorten(url).short_url
+    end
 end
