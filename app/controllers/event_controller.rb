@@ -1,6 +1,6 @@
 class EventController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
-
+  protect_from_forgery :except => [:create,:index,:join,:show,:destroy,:invitation,:auth,:withdrawal]
   before_action :authenticate, {only:[:create,:index,:join,:show,:destroy,:invitation,:auth,:withdrawal]}
 
     # リソースについての記述をします
@@ -253,7 +253,7 @@ class EventController < ApplicationController
 
   def auth
     #有効期限によるトークンの判断
-    @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:token])
+    @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:eventtoken])
     if @token.blank?
       response_unauthorized(:event, :auth)
     else

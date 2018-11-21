@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  protect_from_forgery :except => [:usercreate]
+  protect_from_forgery :except => [:usercreate,:edit,:destroy]
   before_action :authenticate, {only:[:destroy,:edit]}
   
   #top:全データの一覧を表示（デバッグ用）
