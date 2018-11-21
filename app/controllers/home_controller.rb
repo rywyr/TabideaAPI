@@ -1,6 +1,8 @@
 class HomeController < ApplicationController
-
-  skip_before_action :verify_authenticity_token
+  include ActionController::HttpAuthentication::Token::ControllerMethods
+  protect_from_forgery :except => [:usercreate]
+  before_action :authenticate, {only:[:destroy,:edit]}
+  
   #top:全データの一覧を表示（デバッグ用）
   #index:全データをjsonで返す
   #new:コントローラー内で用いる変数を定義
@@ -121,11 +123,16 @@ class HomeController < ApplicationController
   EDOC
   def show
     @user = User.find_by(uuid:params[:uuid])
-    user = {
-		  "id" => @user.id,
-		  "name" => @user.name
-	  }
-    render:json => user
+    if @user != nil
+      user = {
+		    "id" => @user.id,
+        "name" => @user.name,
+        "token" => @user.token
+	    } 
+      render:json => user
+    else
+      response_unauthorized(:home, :show)
+    end 
   end
 
   def allusers
@@ -157,7 +164,12 @@ class HomeController < ApplicationController
     email = @json_request["email"]
     uuid = @json_request["uuid"]
     @user = User.create(name: name,email: email,uuid: uuid)
-    redirect_to :action => "show" ,uuid: @user.uuid
+    user = {
+		    "id" => @user.id,
+        "name" => @user.name,
+        "token" => @user.token
+	    } 
+    render:json => user
     #render:json => {"name":name,"email":email,"uuid":uuid}
     #curl https://quiet-sands-57575.herokuapp.com/home/jcre -X POST -H "Content-Type: application/json" -d "{\"user\":{\"name\": \"ichikawa\",\"email\": \"sdfsdf@mail\"}}"
   end
@@ -206,5 +218,13 @@ class HomeController < ApplicationController
       #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"
       #curl httphttps://quiet-sands-57575.herokuapp.com/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"izawa\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\",\"uuid\":\"izawan\"}"
   end
+
+  def authenticate
+        authenticate_or_request_with_http_token do |token,options|
+          auth_user = User.find_by(token: token)
+          auth_user != nil ? true : false
+        end
+  end
+
 
 end

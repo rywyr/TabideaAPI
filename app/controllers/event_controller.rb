@@ -1,5 +1,8 @@
 class EventController < ApplicationController
-    skip_before_action :verify_authenticity_token
+  include ActionController::HttpAuthentication::Token::ControllerMethods
+
+  before_action :authenticate, {only:[:create,:index,:join,:show,:destroy,:invitation,:auth,:withdrawal]}
+
     # リソースについての記述をします
   resource_description do
     short 'イベント情報を扱うエンドポイント'
@@ -37,11 +40,11 @@ class EventController < ApplicationController
         @json_request = JSON.parse(request.body.read)
         @user = User.find(params[:user_id])
         title = @json_request["title"]
-        @event = @user.event.create(title: title,creator: @user.name)
+        @event = @user.event.create(title: title,creator: @user.id)
         event = {
 		  "id" => @event.id,
           "title" => @event.title,
-          "creater" => @user.name
+          "creator" => @user.name
 	    }
          render:json => event       
     end
@@ -121,11 +124,7 @@ class EventController < ApplicationController
     #    end
     #end
     def join
-        #有効期限によるトークンの判断
-        @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:token])
-        id = @token.event_id
-        @token.update_attributes(expire_at: Time.now)
-        @event = Event.find(id)
+        @event = Event.find(params[:event_id])
         @user = User.find(params[:user_id])
         Userevent.create(user_id: @user.id,event_id: @event.id)
         
@@ -140,7 +139,8 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":ue.event.creator,"member":member_array}
+           @creator = User.find(ue.event.creator)
+           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":@creator.name,"member":member_array}
            enum = enum + 1
         end
         render:json=>eve_array
@@ -202,8 +202,9 @@ class EventController < ApplicationController
                 member_array[mnum] = ue.user.id
                 mnum = mnum + 1
             end
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":ue.event.creator,"member":member_array}
-           enum = enum + 1
+            @creator = User.find(ue.event.creator)
+            eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":@creator.name,"member":member_array}
+            enum = enum + 1
         end
         render:json=>eve_array
 
@@ -243,10 +244,29 @@ class EventController < ApplicationController
     @user = User.find(params[:user_id])
     @token = @user.tokens.create(uuid: SecureRandom.uuid, expire_at: 24.hours.since, event_id: params[:event_id])
     originalurl = "https://fast-peak-71769.herokuapp.com/event/#{@token.uuid}"
+   #originalurl = "http://localhost:3000/event/#{@token.uuid}"
     url = {
 		  "url" => bitly_shorten(originalurl)
 	    }
     render:json => url
+  end
+
+  def auth
+    #有効期限によるトークンの判断
+    @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:token])
+    if @token.blank?
+      response_unauthorized(:event, :auth)
+    else
+      id = @token.event_id
+      #@token.update_attributes(expire_at: Time.now)
+      @event = Event.find(id)
+      event = {
+		  "id" => @event.id,
+          "title" => @event.title,
+          "creator" => @event.creator
+	    }
+      render:json => event    
+    end
   end
 
   def withdrawal
@@ -257,6 +277,13 @@ class EventController < ApplicationController
         "title" => @event.title
     }
     render:json => title
+  end
+
+  def authenticate
+        authenticate_or_request_with_http_token do |token,options|
+          auth_user = User.find_by(token: token)
+          auth_user != nil ? true : false
+        end
   end
 
 private

@@ -5,7 +5,6 @@ Rails.application.routes.draw do
  
   post    'event/create/:user_id' => 'event#create'
   get     'event/index'
-  post    'event/join/:user_id/:event_id' => 'event#join'
   get     'event/show/:user_id/:event_id' => 'event#show'
   get     'event/show/:user_id' => 'event#show'
   delete  'event/destroy/:event_id' => 'event#destroy'
@@ -13,7 +12,8 @@ Rails.application.routes.draw do
   get     'event/invitation/:user_id/:event_id' => 'event#invitation'
   get     'event/withdrawal/:user_id/:event_id' => 'event#withdrawal'
 
-  get     'event/:token/:user_id' => 'event#join'
+  get     'event/:token' => 'event#auth'
+  get     'event/join/:user_id/:event_id' => 'event#join'
 
   get     'home/top'
   get     'home/index/:uuid' => 'home#index'
