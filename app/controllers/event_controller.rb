@@ -1,5 +1,8 @@
 class EventController < ApplicationController
-    skip_before_action :verify_authenticity_token
+  include ActionController::HttpAuthentication::Token::ControllerMethods
+
+  before_action :authenticate, {only:[:create,:index,:join,:show,:destroy,:invitation,:auth,:withdrawal]}
+
     # リソースについての記述をします
   resource_description do
     short 'イベント情報を扱うエンドポイント'
@@ -274,6 +277,13 @@ class EventController < ApplicationController
         "title" => @event.title
     }
     render:json => title
+  end
+
+  def authenticate
+        authenticate_or_request_with_http_token do |token,options|
+          auth_user = User.find_by(token: token)
+          auth_user != nil ? true : false
+        end
   end
 
 private
