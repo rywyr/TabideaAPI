@@ -271,6 +271,7 @@ class EventController < ApplicationController
         end
     else
         redirect_to 'https://www.google.co.jp'
+    end
   end
 
   def withdrawal
