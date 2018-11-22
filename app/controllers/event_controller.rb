@@ -253,7 +253,7 @@ class EventController < ApplicationController
 
   def auth
     #有効期限によるトークンの判断
-    authenticate_or_request_with_http_token do |token,options|
+    #authenticate_or_request_with_http_token do |token,options|
         @user  = User.find_by(token:token)
         if @user != nil
             @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:eventtoken])
@@ -273,7 +273,7 @@ class EventController < ApplicationController
         else
             redirect_to 'https://www.google.co.jp'
         end
-    end
+    #end
   end
 
   def withdrawal
