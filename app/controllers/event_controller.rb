@@ -1,7 +1,7 @@
 class EventController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  protect_from_forgery :except => [:create,:index,:join,:show,:destroy,:invitation,:auth,:withdrawal]
-  before_action :authenticate, {only:[:create,:index,:join,:show,:destroy,:invitation,:withdrawal]}
+  protect_from_forgery :except => [:create,:index,:join,:show,:destroy,:auth,:invitation,:auth,:withdrawal]
+  before_action :authenticate, {only:[:create,:index,:join,:show,:destroy,:auth,:invitation,:withdrawal]}
 
     # リソースについての記述をします
   resource_description do
@@ -246,34 +246,28 @@ class EventController < ApplicationController
     originalurl = "https://fast-peak-71769.herokuapp.com/event/#{@token.uuid}"
    #originalurl = "http://localhost:3000/event/#{@token.uuid}"
     url = {
-		  "url" => bitly_shorten(originalurl)
+          #"url" => bitly_shorten(originalurl)
+          "url"  => originalurl
 	    }
     render:json => url
   end
 
   def auth
     #有効期限によるトークンの判断
-    #authenticate_or_request_with_http_token do |token,options|
-        @user  = User.find_by(token:token)
-        if @user != nil
-            @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:eventtoken])
-            if @token.blank?
-              response_unauthorized(:event, :auth)
-            else
-              id = @token.event_id
-              #@token.update_attributes(expire_at: Time.now)
-              @event = Event.find(id)
-              event = {
-		            "id" => @event.id,
-                    "title" => @event.title,
-                    "creator" => @event.creator
-	            }
-             render:json => event    
-            end
-        else
-            redirect_to 'https://www.google.co.jp'
-        end
-    #end
+    @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:eventtoken])
+    if @token.blank?
+        response_unauthorized(:event, :auth)
+    else
+        id = @token.event_id
+        #@token.update_attributes(expire_at: Time.now)
+        @event = Event.find(id)
+        event = {
+		       "id" => @event.id,
+               "title" => @event.title,
+               "creator" => @event.creator
+	    }
+        render:json => event
+    end
   end
 
   def withdrawal
