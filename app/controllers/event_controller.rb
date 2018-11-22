@@ -253,24 +253,26 @@ class EventController < ApplicationController
 
   def auth
     #有効期限によるトークンの判断
-    @user  = User.find_by(token:token)
-    if @user != nil
-        @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:eventtoken])
-        if @token.blank?
-          response_unauthorized(:event, :auth)
+    authenticate_or_request_with_http_token do |token,options|
+        @user  = User.find_by(token:token)
+        if @user != nil
+            @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:eventtoken])
+            if @token.blank?
+              response_unauthorized(:event, :auth)
+            else
+              id = @token.event_id
+              #@token.update_attributes(expire_at: Time.now)
+              @event = Event.find(id)
+              event = {
+		            "id" => @event.id,
+                    "title" => @event.title,
+                    "creator" => @event.creator
+	            }
+             render:json => event    
+            end
         else
-          id = @token.event_id
-          #@token.update_attributes(expire_at: Time.now)
-          @event = Event.find(id)
-          event = {
-		    "id" => @event.id,
-              "title" => @event.title,
-              "creator" => @event.creator
-	     }
-         render:json => event    
+            redirect_to 'https://www.google.co.jp'
         end
-    else
-        redirect_to 'https://www.google.co.jp'
     end
   end
 

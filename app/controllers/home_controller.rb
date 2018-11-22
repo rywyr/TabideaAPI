@@ -127,7 +127,7 @@ class HomeController < ApplicationController
       user = {
 		    "id" => @user.id,
         "name" => @user.name,
-        "token" => @user.token
+        "token" => "Token #{@user.token}"
 	    } 
       render:json => user
     else
