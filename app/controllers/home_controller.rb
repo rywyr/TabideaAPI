@@ -214,7 +214,10 @@ class HomeController < ApplicationController
       @user = User.find(params[:id]); #レコード自体が入っている(データベースのデータ)
       @user.update_attributes(name: @json_request["name"],email: @json_request["email"],uuid: @user.uuid)
       #@user.update_attributes(name: @json_request["name"])
-      render:json => @user
+      user = {
+        "name" => @user.name
+	    } 
+    render:json => user
       #curl http://localhost:3000/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"unk\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\"}"
       #curl httphttps://quiet-sands-57575.herokuapp.com/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"izawa\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\",\"uuid\":\"izawan\"}"
   end
