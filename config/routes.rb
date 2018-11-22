@@ -15,8 +15,6 @@ Rails.application.routes.draw do
   get     'event/:eventtoken' => 'event#auth'
   get     'event/join/:user_id/:event_id' => 'event#join'
 
-  get     'home/top'
-  get     'home/index/:uuid' => 'home#index'
   get     'home/show/:uuid' => 'home#show'
   get     'home/allusers'
   post    'home/edit/:id' => 'home#edit'

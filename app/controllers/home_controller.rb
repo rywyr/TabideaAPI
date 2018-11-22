@@ -1,8 +1,9 @@
 class HomeController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  protect_from_forgery :except => [:usercreate,:edit,:destroy]
+  protect_from_forgery :except => [:usercreate,:edit,:destroy,:allusers]
   before_action :authenticate, {only:[:destroy,:edit]}
-  
+  before_action :atuhenticatem, {only:[:allusers]}
+  Key = "tsubasa96471205"
   #top:全データの一覧を表示（デバッグ用）
   #index:全データをjsonで返す
   #new:コントローラー内で用いる変数を定義
@@ -29,84 +30,8 @@ class HomeController < ApplicationController
        spec用のspec/dummyを見るとよくわかります。
     EOS
   end
-
-  def top #デバッグ用一覧表示（後ほど消す）
-    @user = User.all
-    @event = Event.all
-    @userevent = Userevent.all
-    @mmo = Mmo.all
-  end
-
-  api :GET, '/home/index/:uuid', 'UUIDによって指定されたユーザ一情報（参加しているイベント）を返します'
-  # エラーの指定はこのような形で
-  error code: 404, desc: 'Not Found'
-
-  # 利用例は example に記載
-  example <<-EDOC
-  $ curl http://localhost:3000/home/index/tsubasa
-        {
-           "id": 3,
-           "name": "Potter",
-           "eventList": [
-               {
-                "id": 3,
-                "title": "長崎"
-               }
-            ]
-        }
-  EDOC
-  def index
-    @user = User.find_by(uuid:params[:uuid])
-    eve_array = Array.new
-    num = 0
-
-    @user.userevent.each do |ue|
-      mmo_array = Array.new
-      mem_array = Array.new
-      eventid = ue.event.id
-      
-      #MMO配列の作成しました
-      j = 0
-      Mmo.all.each do |mmoeve| #個々の処理もうちょっと何とかできるはず
-        if(mmoeve.event_id == eventid)
-          mmo_array[j] = {"viewIndex":mmoeve.viewIndex,"text":mmoeve.text,"positionX":mmoeve.xposition,"positionY":mmoeve.yposition}
-          j = j + 1
-        end
-      end
-      
-      #メンバー配列の作成
-      j = 0
-      Userevent.all.each do |eu|
-        if(eu.event_id == eventid)
-          mem_array[j] =eu.user_id
-          j = j + 1 
-        end
-      end
-
-      #イベント配列の作成
-      eve_array[num] = {"id":eventid,"title":ue.event.eventname}
-      num= num + 1
-    end
-
-    user = {
-		  "id": @user.id,
-		  "name": @user.name,
-      "eventList":eve_array #memberをjsonに追加
-	  }
-    render:json => user
-    #curl http://localhost:3000/home/index/2 -X POST -H "Content-Type: application/json"
-    #curl http://quiet-sands-57575.herokuapp.com/home/index/2 -X POST -H "Content-Type: application/json"
-  end
-
-  def create #いらん
-      name = params[:user][:name]
-      email = params[:user][:email]
-      uuid = params[:user][:uuid]
-      User.create(name: name,email: email,uuid: uuid)
-      #curl http://localhost:3000/home/create -X POST -H "Content-Type: application/json" -d "{"user":{"name": "ainz","email": "abs@mail"}}"
-  end
-
-  api :POST, '/home/show/:uuid', '指定のUUIDのユーザ情報を返します'
+  
+  api :GET, '/home/show/:uuid', '指定のUUIDのユーザ情報を返します'
   description '指定のIDのユーザ情報を返します'
   formats ['json']
   error code: 401, description: 'Unauthorized'
@@ -226,6 +151,14 @@ class HomeController < ApplicationController
         authenticate_or_request_with_http_token do |token,options|
           auth_user = User.find_by(token: token)
           auth_user != nil ? true : false
+        end
+  end
+
+  def atuhenticatem
+        authenticate_or_request_with_http_token do |token,options|
+          auth_user = User.find_by(token: token)
+             master = User.find_by(token: Key)
+          auth_user != master ? false : true
         end
   end
 
