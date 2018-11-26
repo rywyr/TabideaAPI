@@ -250,7 +250,7 @@ class EventController < ApplicationController
   def invitation
     @user = User.find(params[:user_id])
     @token = @user.tokens.create(uuid: SecureRandom.uuid, expire_at: 24.hours.since, event_id: params[:event_id])
-    originalurl = "tabidea://#{@token.uuid}"
+    originalurl = "tabidea://join/#{@token.uuid}"
    #originalurl = "http://localhost:3000/event/#{@token.uuid}"
     url = {
           #"url" => bitly_shorten(originalurl)
