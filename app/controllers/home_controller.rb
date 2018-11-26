@@ -55,7 +55,7 @@ class HomeController < ApplicationController
 	    } 
       render:json => user
     else
-      response_unauthorized(:home, :show)
+      response_unauthorized
     end 
   end
 
