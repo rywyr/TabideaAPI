@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_13_012854) do
+ActiveRecord::Schema.define(version: 2018_11_26_071356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_012854) do
     t.integer "creator"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "icon_image"
   end
 
   create_table "mmos", force: :cascade do |t|
@@ -55,9 +56,10 @@ ActiveRecord::Schema.define(version: 2018_11_13_012854) do
     t.string "name"
     t.string "email"
     t.string "uuid"
-    t.string  "token"
+    t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "icon_image"
   end
 
   add_foreign_key "mmos", "events"

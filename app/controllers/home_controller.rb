@@ -89,7 +89,7 @@ class HomeController < ApplicationController
     email = @json_request["email"]
     uuid = @json_request["uuid"]
     token = @json_request["token"]
-    @user = User.create(name: name,email: email,uuid: uuid,token: token)
+    @user = User.create(name: name,email: email,uuid: uuid)
     user = {
 		    "id" => @user.id,
         "name" => @user.name,
