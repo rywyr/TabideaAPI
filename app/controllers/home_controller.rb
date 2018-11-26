@@ -50,9 +50,9 @@ class HomeController < ApplicationController
     @user = User.find_by(uuid:params[:uuid])
     if @user != nil
       user = {
-		    "id" => @user.id,
-        "name" => @user.name,
-        "token" => @user.token
+		    id:  @user.id,
+        name: @user.name,
+        token: @user.token
 	    } 
       render:json => user
     else
