@@ -68,3 +68,5 @@ gem 'devise'
 gem 'bitly'
 
 gem 'bcrypt'
+
+gem 'carrierwave'
