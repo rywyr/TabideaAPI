@@ -12,8 +12,8 @@ Rails.application.routes.draw do
   get     'event/invitation/:user_id/:event_id' => 'event#invitation'
   get     'event/withdrawal/:user_id/:event_id' => 'event#withdrawal'
 
-  get     'event/:eventtoken' => 'event#auth'
-  get     'event/join/:user_id/:event_id' => 'event#join'
+  #get     'event/:eventtoken' => 'event#auth'
+  get     'event/join/:user_id/:eventtoken' => 'event#join'
 
   get     'home/show/:uuid' => 'home#show'
   get     'home/allusers'

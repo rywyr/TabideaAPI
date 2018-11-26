@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
   protect_from_forgery :except => [:usercreate,:edit,:destroy,:allusers]
-  before_action :authenticate, {only:[:destroy,:edit,:show]}
+  before_action :authenticate, {only:[:destroy,:edit]}
   before_action :atuhenticatem, {only:[:allusers]}
   Key = "tsubasa96471205"
   #top:全データの一覧を表示（デバッグ用）
@@ -51,11 +51,12 @@ class HomeController < ApplicationController
     if @user != nil
       user = {
 		    "id" => @user.id,
-        "name" => @user.name
+        "name" => @user.name,
+        "token" => @user.token
 	    } 
       render:json => user
     else
-      response_unauthorized
+      response_bad_request
     end 
   end
 

@@ -124,26 +124,33 @@ class EventController < ApplicationController
     #    end
     #end
     def join
-        @event = Event.find(params[:event_id])
-        @user = User.find(params[:user_id])
-        Userevent.create(user_id: @user.id,event_id: @event.id)
-        
-        eve_array = Array.new
-        enum = 0
-        @user.userevent.each do |ue|
-            #イベントに所属するメンバーの配列
-            @event = ue.event
-            member_array = Array.new
-            mnum = 0
-            @event.userevent.each do |ue|
-                member_array[mnum] = ue.user.id
-                mnum = mnum + 1
+        @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:eventtoken])
+        if @token.blank?
+            response_bad_request
+        else
+            id = @token.event_id
+            #@token.update_attributes(expire_at: Time.now)
+            @event = Event.find(id)
+            @user = User.find(params[:user_id])
+            Userevent.create(user_id: @user.id,event_id: @event.id)
+            
+            eve_array = Array.new
+            enum = 0
+            @user.userevent.each do |ue|
+                #イベントに所属するメンバーの配列
+                @event = ue.event
+                member_array = Array.new
+                mnum = 0
+                @event.userevent.each do |ue|
+                    member_array[mnum] = ue.user.id
+                    mnum = mnum + 1
+                end
+            @creator = User.find(ue.event.creator)
+            eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":@creator.name,"member":member_array}
+            enum = enum + 1
             end
-           @creator = User.find(ue.event.creator)
-           eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":@creator.name,"member":member_array}
-           enum = enum + 1
+            render:json=>eve_array
         end
-        render:json=>eve_array
     end
 
     api :GET, '/event/show/:user_id', 'ユーザーが参加するすべてのイベントの表示'
@@ -243,7 +250,7 @@ class EventController < ApplicationController
   def invitation
     @user = User.find(params[:user_id])
     @token = @user.tokens.create(uuid: SecureRandom.uuid, expire_at: 24.hours.since, event_id: params[:event_id])
-    originalurl = "https://fast-peak-71769.herokuapp.com/event/#{@token.uuid}"
+    originalurl = "tabidea://#{@token.uuid}"
    #originalurl = "http://localhost:3000/event/#{@token.uuid}"
     url = {
           #"url" => bitly_shorten(originalurl)
@@ -256,7 +263,7 @@ class EventController < ApplicationController
     #有効期限によるトークンの判断
     @token = Token.where(['expire_at > ?', Time.now]).find_by(uuid: params[:eventtoken])
     if @token.blank?
-        response_unauthorized(:event, :auth)
+        response_bad_request
     else
         id = @token.event_id
         #@token.update_attributes(expire_at: Time.now)
