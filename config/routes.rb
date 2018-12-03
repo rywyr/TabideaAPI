@@ -24,5 +24,9 @@ Rails.application.routes.draw do
   post    'home/usercreate' => 'home#usercreate'
   delete  'home/destroy/:id' =>'home#destroy'
 
+  get     'category/show/:event_id'  => 'category#show'
+  post    'category/create/:event_id' => 'category#create'    
+  delete  'category/destroy/:category_id' => 'category#destroy'
+
   root 'application#hello'
 end
