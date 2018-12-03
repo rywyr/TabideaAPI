@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'category/show'
+  get 'category/create'
+  get 'category/destroy'
   apipie
   get 'rooms/show'
   mount ActionCable.server => '/cable'

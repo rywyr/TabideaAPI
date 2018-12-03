@@ -22,10 +22,12 @@ ActiveRecord::Schema.define(version: 2018_12_02_131043) do
   end
 
   create_table "eventcategories", force: :cascade do |t|
-    t.integer "event_id"
-    t.integer "category_id"
+    t.bigint "event_id"
+    t.bigint "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_eventcategories_on_category_id"
+    t.index ["event_id"], name: "index_eventcategories_on_event_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -34,18 +36,6 @@ ActiveRecord::Schema.define(version: 2018_12_02_131043) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "icon_image"
-  end
-
-  create_table "mmos", force: :cascade do |t|
-    t.string "text"
-    t.integer "xposition", null: false
-    t.integer "yposition", null: false
-    t.integer "parent"
-    t.bigint "event_id"
-    t.integer "viewIndex"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_mmos_on_event_id"
   end
 
   create_table "tokens", force: :cascade do |t|
@@ -59,10 +49,12 @@ ActiveRecord::Schema.define(version: 2018_12_02_131043) do
   end
 
   create_table "userevents", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "event_id"
+    t.bigint "user_id"
+    t.bigint "event_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_userevents_on_event_id"
+    t.index ["user_id"], name: "index_userevents_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -75,5 +67,8 @@ ActiveRecord::Schema.define(version: 2018_12_02_131043) do
     t.string "icon_image"
   end
 
-  add_foreign_key "mmos", "events"
+  add_foreign_key "eventcategories", "categories"
+  add_foreign_key "eventcategories", "events"
+  add_foreign_key "userevents", "events"
+  add_foreign_key "userevents", "users"
 end
