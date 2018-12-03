@@ -69,4 +69,6 @@ gem 'bitly'
 
 gem 'bcrypt'
 
+gem 'dotenv-rails'
+
 gem 'carrierwave'
