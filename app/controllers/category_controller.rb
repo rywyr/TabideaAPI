@@ -10,11 +10,8 @@ class CategoryController < ApplicationController
       category_array[cnum] = {"name":ec.category.name, "color":ec.category.color}
       cnum = cnum + 1
     end
-    categoryevent = {
-      id: @event.id,
-      category: category_array
-    }
-    render:json => categoryevent
+    
+    render:json => category_array
   end
 
   def create
@@ -36,6 +33,17 @@ class CategoryController < ApplicationController
 
     category = {
       "name" => cname
+    }
+    render:json => category
+  end
+
+  def edit
+    @category = Category.find(params[:category_id])
+    @json_request = JSON.parse(request.body.read)
+    @category.update_attributes(name: @json_request["name"],color: @json_request["color"])
+    category = {
+      name: @category.name,
+      color: @category.color
     }
     render:json => category
   end

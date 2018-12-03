@@ -3,7 +3,6 @@ class HomeController < ApplicationController
   protect_from_forgery :except => [:usercreate,:edit,:destroy,:allusers]
   before_action :authenticate, {only:[:destroy,:edit]}
   before_action :atuhenticatem, {only:[:allusers]}
-  Key = "tsubasa96471205"
   #top:全データの一覧を表示（デバッグ用）
   #index:全データをjsonで返す
   #new:コントローラー内で用いる変数を定義
@@ -157,7 +156,7 @@ class HomeController < ApplicationController
   def atuhenticatem
         authenticate_or_request_with_http_token do |token,options|
           auth_user = User.find_by(token: token)
-             master = User.find_by(token: Key)
+             master = User.find_by(token: ENV['master_key'])
           auth_user != master ? false : true
         end
   end
