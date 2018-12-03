@@ -3,49 +3,7 @@ class HomeController < ApplicationController
   protect_from_forgery :except => [:usercreate,:edit,:destroy,:allusers]
   before_action :authenticate, {only:[:destroy,:edit]}
   before_action :atuhenticatem, {only:[:allusers]}
-  Key = "tsubasa96471205"
-  #top:全データの一覧を表示（デバッグ用）
-  #index:全データをjsonで返す
-  #new:コントローラー内で用いる変数を定義
-  #create:フォームからユーザーを追加（デバッグ用）
-  #show:該当するidのデータをjsonで返す
-  #jcre:受けとったjsonからデータを追加
-  #destroy:該当する名前のデータを削除
-  #update:アップデート
-  #edit:受け取ったjsonからデータを編集して、アップデート
-  # リソースについての記述をします
-  resource_description do
-    short 'ユーザ情報を扱うエンドポイント'
-    path '/home'
-    formats [:json]          # Suppoeted Formats に該当
-    api_versions 'public'    # APIのバージョン
-
-    description <<-EOS
-      ## エンドポイントの説明
-       ユーザー情報を扱います。
-          Headline: <%= headline %>
-          First name: <%= person.first_name %>
-       このAPIを使うときは、このヘッダをつけてね、とか。
-       apipieでのドキュメントの記載方法は、apipie-railsのspecの下にある
-       spec用のspec/dummyを見るとよくわかります。
-    EOS
-  end
   
-  api :GET, '/home/show/:uuid', '指定のUUIDのユーザ情報を返します'
-  description '指定のIDのユーザ情報を返します'
-  formats ['json']
-  error code: 401, description: 'Unauthorized'
-  error code: 404, description: 'Not Found'
-  error code: 400, description: 'Invalid parameter'
-
-  example <<-EDOC
-  $ curl http://localhost:3000/home/show/tsubasa
-        Content-Type: application/json; charset=utf-8
-        {
-          "id": 3,
-          "name": "Potter"
-        }
-  EDOC
   def show
     @user = User.find_by(uuid:params[:uuid])
     if @user != nil
@@ -147,6 +105,14 @@ class HomeController < ApplicationController
       #curl httphttps://quiet-sands-57575.herokuapp.com/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"izawa\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\",\"uuid\":\"izawan\"}"
   end
 
+  def upload
+    @json_request = JSON.parse(request.body.read)
+    @user = User.find(params[:id])
+    @icon_image = @json_request["icon_image"]
+    @user.update_attributes(name: @user.name,email: @user.email,uuid: @user.uuid,icon_image: @icon_image)
+    render:json => @user
+  end
+
   def authenticate
         authenticate_or_request_with_http_token do |token,options|
           auth_user = User.find_by(token: token)
@@ -157,7 +123,7 @@ class HomeController < ApplicationController
   def atuhenticatem
         authenticate_or_request_with_http_token do |token,options|
           auth_user = User.find_by(token: token)
-             master = User.find_by(token: Key)
+             master = User.find_by(token: ENV['master_key'])
           auth_user != master ? false : true
         end
   end

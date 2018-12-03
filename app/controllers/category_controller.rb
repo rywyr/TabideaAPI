@@ -40,6 +40,18 @@ class CategoryController < ApplicationController
     render:json => category
   end
 
+  def edit
+    @category = Category.find(params[:category_id])
+    @json_request = JSON.parse(request.body.read)
+    @category.update_attributes(name: @json_request["name"],color: @json_request["color"])
+    category = {
+      name: @category.name,
+      color: @category.color
+    }
+    render:json => category
+  end
+
+
   def authenticate
         authenticate_or_request_with_http_token do |token,options|
           auth_user = User.find_by(token: token)

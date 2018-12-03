@@ -22,11 +22,13 @@ Rails.application.routes.draw do
   get     'home/allusers'
   post    'home/edit/:id' => 'home#edit'
   post    'home/usercreate' => 'home#usercreate'
+  post    'home/upload/:id' => 'home#upload'
   delete  'home/destroy/:id' =>'home#destroy'
 
-  get     'category/show/:event_id'  => 'category#show'
-  post    'category/create/:event_id' => 'category#create'    
-  delete  'category/destroy/:category_id' => 'category#destroy'
+
+  get     'categories/:event_id'  => 'category#show'
+  post    'categories/:event_id' => 'category#create'    
+  delete  'categories/:category_id' => 'category#destroy'
 
   root 'application#hello'
 end
