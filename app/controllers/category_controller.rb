@@ -7,7 +7,7 @@ class CategoryController < ApplicationController
     cnum = 0
     @event.eventcategory.each do |ec|
       @category = ec.category
-      category_array[cnum] = {"name":ec.category.name, "color":ec.category.color}
+      category_array[cnum] = {"id":ec.category.id,"name":ec.category.name, "color":ec.category.color}
       cnum = cnum + 1
     end
     
