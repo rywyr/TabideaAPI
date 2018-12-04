@@ -43,6 +43,8 @@ class EventController < ApplicationController
         event = {
 		  "id" => @event.id,
           "title" => @event.title,
+          "created_at" => @event.created_at.to_s,
+          "updated_at" => @event.updated_at.to_s,
           "creator" => @user.name
 	    }
          render:json => event       
