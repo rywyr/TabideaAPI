@@ -1,7 +1,7 @@
 class EventController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  protect_from_forgery :except => [:create,:index,:join,:show,:destroy,:auth,:invitation,:auth,:withdrawal]
-  before_action :authenticate, {only:[:create,:index,:join,:show,:destroy,:auth,:invitation,:withdrawal]}
+  protect_from_forgery :except => [:create,:index,:join,:show,:destroy,:update,:auth,:invitation,:auth,:withdrawal]
+  before_action :authenticate, {only:[:create,:index,:join,:show,:destroy,:update,:auth,:invitation,:withdrawal]}
 
     # リソースについての記述をします
   resource_description do
@@ -37,10 +37,9 @@ class EventController < ApplicationController
         }
     EDOC
     def create #ユーザーが新しいイベントを追加
-        @json_request = JSON.parse(request.body.read)
         @user = User.find(params[:user_id])
-        title = @json_request["title"]
-        @event = @user.event.create(title: title,creator: @user.id)
+        @event = @user.event.new(title: params[:title], icon_image: params[:icon_image], creator: @user.id)
+        @event.save!
         event = {
 		  "id" => @event.id,
           "title" => @event.title,
@@ -73,43 +72,6 @@ class EventController < ApplicationController
         end
         render:json => eventlist
     end
-    api :GET, '/:token/:user_id', 'イベントへの参加'
-    description 'invitationにより作成されたURLへとGETすることでイベントへと参加し、参加したイベント情報を返します。'
-    formats ['json']
-    error code: 401, description: 'Unauthorized'
-    error code: 404, description: 'Not Found'
-    error code: 400, description: 'Invalid parameter'
-
-     example <<-EDOC
-     $ curl http://localhost:3000/:token/:user_id
-        [
-             {
-                 "id": 1,
-                 "title": "福岡",
-                 "member": [
-                          1
-                 ]
-        },
-            {
-                "id": 8,
-                "title": "tsubasa",
-                "member": [
-                        1
-                ]
-        },
-            {
-                "id": 3,
-                "title": "長崎",
-                "member": [
-                        2,
-                        3,
-                        4,
-                        5,
-                        1
-                ]
-            }
-        ]
-    EDOC
     #def join #ユーザーがイベントに参加する処理
     #    @json_request = JSON.parse(request.body.read)
     #    @user_id = params[:user_id]
@@ -153,46 +115,6 @@ class EventController < ApplicationController
         end
     end
 
-    api :GET, '/event/show/:user_id', 'ユーザーが参加するすべてのイベントの表示'
-    description 'pathの情報をもとにユーザーを探し、そのユーザーが参加するイベント情報を返します。'
-    formats ['json']
-    error code: 401, description: 'Unauthorized'
-    error code: 404, description: 'Not Found'
-    error code: 400, description: 'Invalid parameter'
-
-     example <<-EDOC
-     $ curl http://localhost:3000/event/join/:user_id
-        [
-         {
-             "id": 1,
-             "title": "福岡",
-             "password":"aaaaaa",
-             "member": [
-                     1
-             ]
-         },
-         {
-             "id": 8,
-             "title": "tsubasa",
-             "password":"bbbbbbb",
-             "member": [
-                   1
-             ]
-         },
-        {
-            "id": 3,
-            "title": "長崎",
-            "password":"ccccccc",
-            "member": [
-                    2,
-                    3,
-                    4,
-                    5,
-                    1
-            ]
-        }
-        ]
-    EDOC
     def show
         #イベントに参加後そのユーザーが所属するイベントリストの送信
         @user = User.find(params[:user_id])
@@ -236,17 +158,17 @@ class EventController < ApplicationController
     render:json => @events
     #curl -X DELETE http://localhost:3000/event/destroy/:event_id
   end
-  api :GET, '/event/invitation/:event_id', '招待URLの作成'
-  description 'イベントへと招待するためのURLを作成します。'
-  formats ['json']
-  error code: 401, description: 'Unauthorized'
-  error code: 404, description: 'Not Found'
-  error code: 400, description: 'Invalid parameter'
+ 
+  def update
+    @event = Event.find(params[:id])
+    @event.update(event_params)
+    if @event.errors.empty?
+      render json: :ok 
+    else
+      render json: :bad_request
+    end
+  end
 
-  example <<-EDOC
-  $ #curl -X GET http://localhost:3000/event/inivitation/:event_id
-
-  EDOC
   def invitation
     @user = User.find(params[:user_id])
     @token = @user.tokens.create(uuid: SecureRandom.uuid, expire_at: 24.hours.since, event_id: params[:event_id])
@@ -296,14 +218,7 @@ class EventController < ApplicationController
 
 private
 
-    require 'bitly'
- 
-    def bitly_shorten(url)
-      Bitly.use_api_version_3
-      Bitly.configure do |config|
-        config.api_version = 3
-        config.access_token = "1338aaea0666996c77fd606b6261cae9e26b5a63"
-      end
-      Bitly.client.shorten(url).short_url
+    def event_params
+        params.permit(:title,:icon_image)
     end
 end

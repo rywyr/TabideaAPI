@@ -48,6 +48,7 @@ class CategoryController < ApplicationController
     render:json => category
   end
 
+
   def authenticate
         authenticate_or_request_with_http_token do |token,options|
           auth_user = User.find_by(token: token)
