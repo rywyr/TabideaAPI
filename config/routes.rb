@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   get     'home/allusers'
   post    'home/edit/:id' => 'home#edit'
   post    'home/usercreate' => 'home#usercreate'
-  post    'home/upload/:id' => 'home#upload'
+  put    'home/upload/:id' => 'home#upload'
   delete  'home/destroy/:id' =>'home#destroy'
 
 

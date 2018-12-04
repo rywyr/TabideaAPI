@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  protect_from_forgery :except => [:usercreate,:edit,:destroy,:allusers]
-  before_action :authenticate, {only:[:destroy,:edit]}
+  protect_from_forgery :except => [:usercreate,:edit,:destroy,:allusers,:upload]
+  before_action :authenticate, {only:[:destroy,:edit,:upload]}
   before_action :atuhenticatem, {only:[:allusers]}
   
   def show
@@ -106,10 +106,9 @@ class HomeController < ApplicationController
   end
 
   def upload
-    @json_request = JSON.parse(request.body.read)
     @user = User.find(params[:id])
-    @icon_image = @json_request["icon_image"]
-    @user.update_attributes(name: @user.name,email: @user.email,uuid: @user.uuid,icon_image: @icon_image)
+    @user.icon_image = params[:icon_image]
+    @user.save
     render:json => @user
   end
 
