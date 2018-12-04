@@ -132,7 +132,7 @@ class EventController < ApplicationController
                 mnum = mnum + 1
             end
             @creator = User.find(ue.event.creator)
-            eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":@creator.name,"member":member_array,"created_at":ue.created_at,"updated_at":ue.updated_at}
+            eve_array[enum] = {"id":ue.event.id,"title":ue.event.title,"creator":@creator.name,"member":member_array,"created_at":ue.created_at.to_s,"updated_at":ue.updated_at.to_s}
             enum = enum + 1
         end
         render:json=>eve_array
