@@ -5,5 +5,5 @@ class Event < ApplicationRecord
     has_many :category, through: :eventcategory
 
     
-    #mount_uploader :icon_image, ImageUploader
+    mount_uploader :icon_image, ImageUploader
 end

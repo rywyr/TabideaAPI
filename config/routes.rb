@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get     'event/search/:password' => 'event#search'
   get     'event/invitation/:user_id/:event_id' => 'event#invitation'
   get     'event/withdrawal/:user_id/:event_id' => 'event#withdrawal'
+  post    'event/update/:id' => 'event#update'
 
   #get     'event/:eventtoken' => 'event#auth'
   get     'event/join/:user_id/:eventtoken' => 'event#join'
@@ -21,6 +22,7 @@ Rails.application.routes.draw do
   get     'home/show/:uuid' => 'home#show'
   get     'home/allusers'
   post    'home/edit/:id' => 'home#edit'
+  post    'home/update/:id' => 'home#update'
   post    'home/usercreate' => 'home#usercreate'
   put    'home/upload/:id' => 'home#upload'
   delete  'home/destroy/:id' =>'home#destroy'

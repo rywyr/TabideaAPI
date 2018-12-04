@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  protect_from_forgery :except => [:usercreate,:edit,:destroy,:allusers,:upload]
-  before_action :authenticate, {only:[:destroy,:edit,:upload]}
+  protect_from_forgery :except => [:usercreate,:edit,:destroy,:allusers,:update]
+  before_action :authenticate, {only:[:destroy,:edit,:update]}
   before_action :atuhenticatem, {only:[:allusers]}
   
   def show
@@ -42,11 +42,20 @@ class HomeController < ApplicationController
   def usercreate#一番最初のユーザー作成
     #json形式でデータが送られrてくることを想定
     #なぜかメソッドが実行されていないようなのでここは一時保留
-    @json_request = JSON.parse(request.body.read)
-    name = @json_request["name"]
-    email = @json_request["email"]
-    uuid = @json_request["uuid"]
-    @user = User.create(name: name,email: email,uuid: uuid)
+    #name = @json_request["name"]
+    #email = @json_request["email"]
+    #uuid = @json_request["uuid"]
+    #icon_image = @json_request["icon_image"]
+    #@user = User.create(name: params[:name],email: email,uuid: uuid,icon_image: icon_image)
+    p user_params
+    p "------------------"
+    @user = User.new(user_params)
+    p @user.valid? 
+    p "-------------------"
+    p @user.errors.messages
+    p "--------------"
+    p @user.icon_image
+    @user.save!
     user = {
 		    "id" => @user.id,
         "name" => @user.name,
@@ -105,11 +114,14 @@ class HomeController < ApplicationController
       #curl httphttps://quiet-sands-57575.herokuapp.com/home/edit -X POST -H "Content-Type: application/json" -d "{\"id\":5,\"name\":\"izawa\",\"email\":\"sdfsdfsdfsfsdfsdfsfa\",\"uuid\":\"izawan\"}"
   end
 
-  def upload
+  def update
     @user = User.find(params[:id])
-    @user.icon_image = params[:icon_image]
-    @user.save
-    render:json => @user
+    @user.update(user_params)
+    if @user.errors.empty?
+      render json: :ok 
+    else
+      render json: :bad_request
+    end
   end
 
   def authenticate
@@ -127,5 +139,10 @@ class HomeController < ApplicationController
         end
   end
 
+  private
 
+ 
+  def user_params
+    params.permit(:name,:email,:uuid,:icon_image)
+  end
 end
