@@ -200,7 +200,7 @@ class EventController < ApplicationController
 
         eve_array = Array.new
         enum = 0
-        @user.userevent.each do |ue|
+        @user.userevent.order(created_at: :desc).each do |ue|
             #イベントに所属するメンバーの配列
             @event = ue.event
             member_array = Array.new
